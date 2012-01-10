@@ -27,19 +27,20 @@ module Garb
               "dxp:definition" => "ga:visitorType==Returning Visitor"
             }
           }
+          entry = JSON.parse(read_fixture("ga_segment_management.json"))["items"].first
           @segment = Segment.new_from_entry(entry, Session)
         end
 
         should "have an id" do
-          assert_equal "gaid::-3", @segment.id
+          assert_equal "gaid::1", @segment.id
         end
 
         should "have a name" do
-          assert_equal "Returning Visitor", @segment.name
+          assert_equal "derpy", @segment.name
         end
 
         should "have a definition" do
-          assert_equal "ga:visitorType==Returning Visitor", @segment.definition
+          assert_equal "ga:pagePath=@derpy", @segment.definition
         end
       end
     end

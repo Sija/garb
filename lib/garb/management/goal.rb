@@ -27,17 +27,12 @@ module Garb
       def self.new_from_entry(entry, session)
         goal = new
         goal.session = session
-        goal.path = Garb.parse_link(entry, "self").gsub(Feed::BASE_URL, '')
-        goal.properties = entry[Garb.to_ga('goal')]
+        goal.path    = entry["selfLink"].gsub(Feed::BASE_URL, '')
+        goal.name = entry["name"]
+        goal.value = entry["value"]
+        goal.active = entry["active"]
+        goal.destination = Destination.new(entry["urlDestinationDetails"])
         goal
-      end
-
-      def properties=(properties)
-        self.name = properties["name"]
-        self.number = properties["number"].to_i
-        self.value = properties["value"].to_f
-        self.active = (properties["active"] == "true")
-        self.destination = Destination.new(properties[Garb.to_ga('destination')])
       end
     end
   end

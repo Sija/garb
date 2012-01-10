@@ -1,7 +1,8 @@
 module Garb
   module Management
     class Feed
-      BASE_URL = "https://www.google.com/analytics/feeds/datasources/ga"
+      #BASE_URL = "https://www.google.com/analytics/feeds/datasources/ga"
+      BASE_URL = "https://www.googleapis.com/analytics/v3/management"
 
       attr_reader :request
 
@@ -14,8 +15,7 @@ module Garb
       end
 
       def entries
-        # possible to have nil entries, yuck
-        parsed_response ? [parsed_response['feed']['entry']].flatten.compact : []
+        parsed_response ? parsed_response['items'] : []
       end
 
       def response

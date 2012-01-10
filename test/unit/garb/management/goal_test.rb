@@ -37,30 +37,16 @@ module Garb
 
       context "a Goal" do
         setup do
-          entry = {
-            "link" => [{"rel" => "self", "href" => Feed::BASE_URL+"/accounts/1189765/webproperties/UA-1189765-1/profiles/98765"}],
-            "ga:goal" => {
-              "ga:destination"=>{"caseSensitive"=>"false","expression"=>"/blog.html","matchType"=>"head"},
-              "active"=>"true",
-              "name"=>"Read Blog",
-              "number"=>"1",
-              "value"=>"10.0"
-            }
-          }
-
+          entry = JSON.parse(read_fixture("goal_management.json"))["items"].first
           @goal = Goal.new_from_entry(entry, Session)
         end
 
         should "have a name" do
-          assert_equal "Read Blog", @goal.name
-        end
-
-        should "have a number" do
-          assert_equal 1, @goal.number
+          assert_equal "the goal", @goal.name
         end
 
         should "have a value" do
-          assert_equal 10.0, @goal.value
+          assert_equal 1.0, @goal.value
         end
 
         should "know if it is active" do

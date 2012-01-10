@@ -28,23 +28,17 @@ module Garb
 
       context "a WebProperty" do
         setup do
-          entry = {
-            "link" => [{"rel" => "self", "href" => Feed::BASE_URL+"/accounts/1189765/webproperties/UA-1189765-1"}],
-            "dxp$property" => [
-              {"name" => "ga:accountId", "value" => "1189765"},
-              {"name" => "ga:webPropertyId", "value" => 'UA-1189765-1'}
-            ]
-          }
+          entry = JSON.parse(read_fixture("ga_webproperty_management.json"))["items"].first
 
           @web_property = WebProperty.new_from_entry(entry, Session)
         end
 
         should "have an id" do
-          assert_equal "UA-1189765-1", @web_property.id
+          assert_equal "UA-7777-1", @web_property.id
         end
 
         should "have an account_id" do
-          assert_equal "1189765", @web_property.account_id
+          assert_equal "1", @web_property.account_id
         end
 
         should "have profiles" do

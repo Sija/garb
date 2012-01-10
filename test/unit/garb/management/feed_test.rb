@@ -19,13 +19,8 @@ module Garb
         end
 
         should "have entries from the parsed response" do
-          @feed.stubs(:parsed_response).returns({'feed' => {'entry' => ['entry1', 'entry2']}})
+          @feed.stubs(:parsed_response).returns({'items' => ['entry1', 'entry2']})
           assert_equal ['entry1', 'entry2'], @feed.entries
-        end
-
-        should "handle case of a single entry" do
-          @feed.stubs(:parsed_response).returns({'feed' => {'entry' => {'profile_id' => '12345'}}})
-          assert_equal [{'profile_id' => '12345'}], @feed.entries
         end
 
         should "have an empty array for entries without a response" do

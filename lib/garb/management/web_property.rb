@@ -15,15 +15,11 @@ module Garb
 
       def self.new_from_entry(entry, session)
         web_property = new
-        web_property.session = session
-        web_property.path = Garb.parse_link(entry, "self").gsub(Feed::BASE_URL, '')
-        web_property.properties = Garb.parse_properties(entry)
+        web_property.session    = session
+        web_property.path       = entry["selfLink"].gsub(Feed::BASE_URL, '')
+        web_property.id         = entry["id"]
+        web_property.account_id = entry["accountId"]
         web_property
-      end
-
-      def properties=(properties)
-        self.id = properties["web_property_id"]
-        self.account_id = properties["account_id"]
       end
 
       def profiles

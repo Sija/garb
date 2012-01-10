@@ -12,15 +12,11 @@ module Garb
       def self.new_from_entry(entry, session)
         account = new
         account.session = session
-        account.path = Garb.parse_link(entry, "self").gsub(Feed::BASE_URL, '')
-        account.title = entry['title'].gsub('Google Analytics Account ', '') # can we get this in properties=?
-        account.properties = Garb.parse_properties(entry)
+        account.path    = entry["selfLink"].gsub(Feed::BASE_URL, '')
+        account.title   = entry['name'] # TODO is this correct?
+        account.id      = entry["id"]
+        account.name    = entry["name"]
         account
-      end
-
-      def properties=(properties)
-        self.id = properties["account_id"]
-        self.name = properties["account_name"]
       end
 
       def web_properties

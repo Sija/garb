@@ -11,16 +11,12 @@ module Garb
 
       def self.new_from_entry(entry, session)
         segment = new
-        segment.session = session
-        segment.path = Garb.parse_link(entry, "self").gsub(Feed::BASE_URL, '')
-        segment.properties = entry['dxp:segment']
+        segment.session    = session
+        segment.path       = entry["selfLink"].gsub(Feed::BASE_URL, '')
+        segment.id = entry['segmentId']
+        segment.name = entry['name']
+        segment.definition = entry['definition']
         segment
-      end
-
-      def properties=(properties)
-        self.id = properties['id']
-        self.name = properties['name']
-        self.definition = properties['dxp:definition']
       end
     end
   end
