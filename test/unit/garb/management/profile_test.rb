@@ -8,12 +8,12 @@ module Garb
           feed = stub(:entries => ["entry1"])
           Feed.stubs(:new).returns(feed)
 
-          Profile.stubs(:new_from_entry)
+          Profile.stubs(:new)
           Profile.all
 
           assert_received(Feed, :new) {|e| e.with(Session, '/accounts/~all/webproperties/~all/profiles')}
           assert_received(feed, :entries)
-          assert_received(Profile, :new_from_entry) {|e| e.with("entry1", Session)}
+          assert_received(Profile, :new) {|e| e.with("entry1", Session)}
         end
 
         should "find all profiles for a given account" do
@@ -32,7 +32,7 @@ module Garb
       context "A Profile" do
         setup do
           entry = JSON.parse(read_fixture("ga_profile_management.json"))["items"].first
-          @profile = Profile.new_from_entry(entry, Session)
+          @profile = Profile.new(entry, Session)
         end
 
         should "have a name" do

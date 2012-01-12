@@ -11,6 +11,8 @@ rescue LoadError
 end
 
 module Garb
+  autoload :Attributes,       'garb/attributes'
+  autoload :PathAttribute,    'garb/path_attribute'
   autoload :Destination,      'garb/destination'
   autoload :FilterParameters, 'garb/filter_parameters'
   autoload :Model,            'garb/model'

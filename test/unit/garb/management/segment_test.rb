@@ -8,12 +8,12 @@ module Garb
           feed = stub(:entries => ["entry1"])
           Feed.stubs(:new).returns(feed)
 
-          Segment.stubs(:new_from_entry)
+          Segment.stubs(:new)
           Segment.all
 
           assert_received(Feed, :new) {|e| e.with(Session, '/segments')}
           assert_received(feed, :entries)
-          assert_received(Segment, :new_from_entry) {|e| e.with("entry1", Session)}
+          assert_received(Segment, :new) {|e| e.with("entry1", Session)}
         end
       end
 
@@ -28,7 +28,7 @@ module Garb
             }
           }
           entry = JSON.parse(read_fixture("ga_segment_management.json"))["items"].first
-          @segment = Segment.new_from_entry(entry, Session)
+          @segment = Segment.new(entry, Session)
         end
 
         should "have an id" do

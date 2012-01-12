@@ -8,23 +8,22 @@ module Garb
           feed = stub(:entries => ["entry1"])
           Feed.stubs(:new).returns(feed)
 
-          Account.stubs(:new_from_entry)
+          Account.stubs(:new)
           Account.all
 
           assert_received(Feed, :new) {|e| e.with(Session, '/accounts')}
           assert_received(feed, :entries)
-          assert_received(Account, :new_from_entry) {|e| e.with("entry1", Session)}
+          assert_received(Account, :new) {|e| e.with("entry1", Session)}
         end
       end
 
       context "an Account" do
         setup do
           entry = JSON.parse(read_fixture("account_management.json"))['items'].first
-          @account = Account.new_from_entry(entry, Session)
+          @account = Account.new(entry, Session)
         end
 
-        should "extract id and title from GA entry" do
-          assert_equal "www.google.com", @account.title
+        should "extract id from GA entry" do
           assert_equal "1234", @account.id
         end
 

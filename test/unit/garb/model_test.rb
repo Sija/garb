@@ -43,7 +43,7 @@ module Garb
         setup do
           entry = JSON.parse(read_fixture("ga_profile_management.json"))["items"].first
 
-          @profile = Garb::Management::Profile.new_from_entry(entry, Session)
+          @profile = Garb::Management::Profile.new(entry, Session)
         end
 
         context "when getting results" do
@@ -57,7 +57,6 @@ module Garb
 
             now = Time.now
             Time.stubs(:now).returns(now)
-
             @params = {'ids' => Garb.to_ga(@profile.id),
               'start-date' => (now - Model::MONTH).strftime('%Y-%m-%d'),
               'end-date' => now.strftime('%Y-%m-%d'),

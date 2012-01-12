@@ -1,22 +1,21 @@
 module Garb
   module Management
     class Account
-      attr_accessor :session, :path
-      attr_accessor :id, :title, :name
+      extend Garb::Attributes
+      include PathAttribute
+
+      attr_reader :session
+
+      ga_attribute :id, :name
+
+      def initialize(entry, session)
+        @entry = entry
+        @session = session
+      end
 
       def self.all(session = Session)
         feed = Feed.new(session, '/accounts')
-        feed.entries.map {|entry| new_from_entry(entry, session)}
-      end
-
-      def self.new_from_entry(entry, session)
-        account = new
-        account.session = session
-        account.path    = entry["selfLink"].gsub(Feed::BASE_URL, '')
-        account.title   = entry['name'] # TODO is this correct?
-        account.id      = entry["id"]
-        account.name    = entry["name"]
-        account
+        feed.entries.map {|entry| new(entry, session)}
       end
 
       def web_properties
