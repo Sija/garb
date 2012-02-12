@@ -20,7 +20,7 @@ module Garb
           var = "@#{key}"
           hash_key = custom_key.nil? ? key.to_s : custom_key.to_s
           instance_variable_defined?(var) ? instance_variable_get(var) : instance_variable_set(var, @entry[hash_key])
-        end unless method_defined?(key)
+        end #unless method_defined?(key)
       end
 
       def map_values_for(hash)
