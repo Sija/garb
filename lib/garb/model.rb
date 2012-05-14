@@ -50,14 +50,12 @@ module Garb
 
     def all(profile, options = {})
       limit = options.delete(:limit)
-      results = []
-      total = 0
       options[:limit] = 10_000 # maximum allowed
-      while ((rs = results(profile, options)) && !rs.empty?)
+      results = []
+      while ((rs = results(profile, options).to_a) && !rs.empty?)
         results.concat rs
-        total += rs.count
-        break if limit and total >= limit
-        options[:offset] = total
+        break if limit and results.size >= limit
+        options[:offset] = results.size
       end
       limit ? results[0...limit] : results
     end

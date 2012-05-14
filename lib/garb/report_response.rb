@@ -37,7 +37,7 @@ module Garb
     end
 
     def rows
-      parsed_data['rows']
+      parsed_data['rows'] || []
     end
 
     def parse_total_results
