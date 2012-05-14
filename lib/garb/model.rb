@@ -52,10 +52,10 @@ module Garb
       while ((rs = results(profile, options)) && !rs.empty?)
         results.concat rs
         total += rs.count
-        return results[0...limit] if limit and total >= limit
+        break if limit and total >= limit
         options[:offset] = total
       end
-      results
+      limit ? results[0...limit] : results
     end
     
     private
@@ -93,7 +93,10 @@ module Garb
     end
 
     def build_page_params(options)
-      {'max-results' => options[:limit], 'start-index' => options[:offset]}
+      params = {}
+      params['max-results'] = options[:limit] if options.has_key? :limit
+      params['start-index'] = options[:offset] if options.has_key? :offset
+      params
     end
 
     def format_time(t)
