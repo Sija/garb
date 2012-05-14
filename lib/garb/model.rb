@@ -27,6 +27,9 @@ module Garb
     end
 
     def results(profile, options = {})
+      if options.delete(:all)
+        return all(profile, options)
+      end
       start_date = options.fetch(:start_date, Time.now - MONTH)
       end_date = options.fetch(:end_date, Time.now)
       default_params = build_default_params(profile, start_date, end_date)
