@@ -45,6 +45,20 @@ module Garb
       ReportResponse.new(data, instance_klass).results
     end
 
+    def all(profile, options = {})
+      limit = options.delete(:limit)
+      results = []
+      total = 0
+      options[:limit] = 10_000 # maximum allowed
+      while ((rs = results(profile, options)) && !rs.empty?)
+        results.concat rs
+        total += rs.count
+        return results[0...limit] if limit and total >= limit
+        options[:offset] = total
+      end
+      results
+    end
+    
     private
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
