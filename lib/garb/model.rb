@@ -1,7 +1,8 @@
 module Garb
   module Model
     MONTH = 2592000
-    URL = "https://www.google.com/analytics/feeds/data"
+    #URL = "https://www.google.com/analytics/feeds/data"
+    URL = "https://www.googleapis.com/analytics/v3/data/ga"
 
     def self.extended(base)
       ProfileReports.add_report_method(base)
@@ -26,6 +27,9 @@ module Garb
     end
 
     def results(profile, options = {})
+      if options.delete(:all)
+        return all(profile, options)
+      end
       start_date = options.fetch(:start_date, Time.now - MONTH)
       end_date = options.fetch(:end_date, Time.now)
       default_params = build_default_params(profile, start_date, end_date)
@@ -46,14 +50,12 @@ module Garb
 
     def all(profile, options = {})
       limit = options.delete(:limit)
-      results = []
-      total = 0
       options[:limit] = 10_000 # maximum allowed
-      while ((rs = results(profile, options)) && !rs.empty?)
+      results = []
+      while ((rs = results(profile, options).to_a) && !rs.empty?)
         results.concat rs
-        total += rs.count
-        break if limit and total >= limit
-        options[:offset] = total
+        break if limit and results.size >= limit
+        options[:offset] = results.size
       end
       limit ? results[0...limit] : results
     end

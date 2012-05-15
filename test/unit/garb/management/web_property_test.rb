@@ -8,12 +8,12 @@ module Garb
           feed = stub(:entries => ["entry1"])
           Feed.stubs(:new).returns(feed)
 
-          WebProperty.stubs(:new_from_entry)
+          WebProperty.stubs(:new)
           WebProperty.all
 
           assert_received(Feed, :new) {|e| e.with(Session, '/accounts/~all/webproperties')}
           assert_received(feed, :entries)
-          assert_received(WebProperty, :new_from_entry) {|e| e.with("entry1", Session)}
+          assert_received(WebProperty, :new) {|e| e.with("entry1", Session)}
         end
 
         should "find all web properties for a given account" do
@@ -28,23 +28,21 @@ module Garb
 
       context "a WebProperty" do
         setup do
-          entry = {
-            "link" => [{"rel" => "self", "href" => Feed::BASE_URL+"/accounts/1189765/webproperties/UA-1189765-1"}],
-            "dxp$property" => [
-              {"name" => "ga:accountId", "value" => "1189765"},
-              {"name" => "ga:webPropertyId", "value" => 'UA-1189765-1'}
-            ]
-          }
+          entry = JSON.parse(read_fixture("ga_webproperty_management.json"))["items"].first
 
-          @web_property = WebProperty.new_from_entry(entry, Session)
+          @web_property = WebProperty.new(entry, Session)
         end
 
         should "have an id" do
-          assert_equal "UA-1189765-1", @web_property.id
+          assert_equal "UA-7777-1", @web_property.id
         end
 
         should "have an account_id" do
-          assert_equal "1189765", @web_property.account_id
+          assert_equal "1", @web_property.account_id
+        end
+
+        should "combine the WebProperty.path and the id into an new path" do
+          assert_equal "/accounts/1/webproperties/UA-7777-1", @web_property.path
         end
 
         should "have profiles" do

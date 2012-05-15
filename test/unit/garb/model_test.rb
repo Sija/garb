@@ -41,17 +41,9 @@ module Garb
 
       context "with a profile" do
         setup do
-          entry = {
-            "title" => "Google Analytics Profile example.com",
-            "link" => [{"rel" => "self", "href" => Garb::Management::Feed::BASE_URL+"/accounts/1189765/webproperties/UA-1189765-1/profiles/98765"}],
-            "dxp$property" => [
-              {"name" => "ga:profileId", "value" => "98765"},
-              {"name" => "ga:accountId", "value" => "1189765"},
-              {"name" => "ga:webPropertyId", "value" => 'UA-1189765-1'}
-            ]
-          }
+          entry = JSON.parse(read_fixture("ga_profile_management.json"))["items"].first
 
-          @profile = Garb::Management::Profile.new_from_entry(entry, Session)
+          @profile = Garb::Management::Profile.new(entry, Session)
         end
 
         context "when getting results" do
@@ -65,9 +57,6 @@ module Garb
 
             now = Time.now
             Time.stubs(:now).returns(now)
-
-            # p @profile.id
-
             @params = {'ids' => Garb.to_ga(@profile.id),
               'start-date' => (now - Model::MONTH).strftime('%Y-%m-%d'),
               'end-date' => now.strftime('%Y-%m-%d'),

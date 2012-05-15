@@ -11,6 +11,8 @@ rescue LoadError
 end
 
 module Garb
+  autoload :Attributes,       'garb/attributes'
+  autoload :PathAttribute,    'garb/path_attribute'
   autoload :Destination,      'garb/destination'
   autoload :FilterParameters, 'garb/filter_parameters'
   autoload :Model,            'garb/model'
@@ -47,7 +49,7 @@ module Garb
   extend self
 
   class << self
-    attr_accessor :proxy_address, :proxy_port, :proxy_user, :proxy_password
+    attr_accessor :proxy_address, :proxy_port, :proxy_user, :proxy_password, :api_key
     attr_writer   :read_timeout
   end
 
@@ -66,14 +68,6 @@ module Garb
     thing.to_s.gsub(/^ga\:/, '').underscore
   end
   alias :from_ga :from_google_analytics
-
-  def parse_properties(entry)
-    Hash[entry['dxp$property'].map {|p| [Garb.from_ga(p['name']),p['value']]}]
-  end
-
-  def parse_link(entry, rel)
-    entry['link'].detect {|link| link["rel"] == rel}['href']
-  end
 
   def symbol_operator_slugs
     [:eql, :not_eql, :gt, :gte, :lt, :lte, :desc, :descending, :matches,

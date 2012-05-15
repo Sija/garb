@@ -1,6 +1,5 @@
 module Garb
   class ReportResponse
-    KEYS = ['dxp$metric', 'dxp$dimension']
 
     def initialize(response_body, instance_klass = OpenStruct)
       @data = response_body
@@ -22,35 +21,35 @@ module Garb
 
     private
     def parse
-      entries.map do |entry|
+      rows.map do |row|
         @instance_klass.new(Hash[
-          values_for(entry).map {|v| [Garb.from_ga(v['name']), v['value']]}
+          *keys.zip(row).flatten
         ])
       end
     end
 
-    def entries
-      feed? ? [parsed_data['feed']['entry']].flatten.compact : []
+    def column_headers
+      parsed_data['columnHeaders']
+    end
+
+    def keys
+      column_headers.map { |header| Garb.from_ga(header['name']) }
+    end
+
+    def rows
+      parsed_data['rows'] || []
     end
 
     def parse_total_results
-      feed? ? parsed_data['feed']['openSearch:totalResults'].to_i : 0
+      parsed_data['totalResults'].to_i
     end
 
     def parse_sampled_flag
-      feed? ? (parsed_data['feed']['dxp$containsSampledData'] == 'true') : false
+      parsed_data['containsSampledData']
     end
 
     def parsed_data
       @parsed_data ||= JSON.parse(@data)
-    end
-
-    def feed?
-      !parsed_data['feed'].nil?
-    end
-
-    def values_for(entry)
-      KEYS.map {|k| entry[k]}.flatten.compact
     end
   end
 end
