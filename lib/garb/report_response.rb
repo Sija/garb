@@ -8,6 +8,9 @@ module Garb
 
     def results
       if @results.nil?
+        if defined?(Rails) and Rails.logger
+          Rails.logger.debug "Garb::ReportResponse -> #{parsed_data.inspect}"
+        end
         @results = ResultSet.new(parse)
         @results.total_results = parse_total_results
         @results.sampled = parse_sampled_flag

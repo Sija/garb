@@ -37,6 +37,10 @@ module Garb
       end
 
       def send_request
+        if defined?(Rails) and Rails.logger
+          Rails.logger.debug "Garb::Request -> #{uri.path}#{query_string}"
+        end
+        
         response = if @session.single_user?
           single_user_request
         elsif @session.oauth_user?
