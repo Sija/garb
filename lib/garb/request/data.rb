@@ -1,11 +1,17 @@
 module Garb
+  class ClientError < StandardError
+    attr_reader :code, :message, :errors
+    
+    def initialize(code, message, errors = [])
+      @code, @message, @errors = code, message, errors
+    end
+  end
+  
   module Request
     class Data
-      class ClientError < StandardError; end
-
       attr_writer :format
 
-      def initialize(session, base_url, parameters={})
+      def initialize(session, base_url, parameters = {})
         @session = session
         @base_url = base_url
         @parameters = parameters
@@ -17,17 +23,17 @@ module Garb
 
       def query_string
         parameters.merge!('key' => Garb.api_key) unless Garb.api_key.nil?
-        parameters.merge!("alt" => format)
-        parameter_list = @parameters.map {|k,v| "#{k}=#{v}" }
+        parameters.merge!('alt' => format)
+        parameter_list = parameters.map { |k,v| "#{k}=#{v}" }
         parameter_list.empty? ? '' : "?#{parameter_list.join('&')}"
       end
 
       def format
-        @format ||= "json" # TODO Support other formats?
+        @format ||= 'json' # TODO Support other formats?
       end
 
       def uri
-        URI.parse(@base_url)
+        @uri ||= URI.parse(@base_url)
       end
 
       def send_request
@@ -37,7 +43,14 @@ module Garb
           oauth_user_request
         end
 
-        raise ClientError, response.body.inspect unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
+        unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
+          body = JSON.parse(response.body) rescue nil
+          if body
+            raise ClientError.new(body['error']['code'], body['error']['code'], body['error']['errors'])
+          else
+            raise ClientError, response.body.inspect
+          end
+        end
         response
       end
 

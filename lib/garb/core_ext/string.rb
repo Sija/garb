@@ -1,5 +1,5 @@
 # Pull in some AS String utilities (not loaded if AS is available)
-unless Object.const_defined?("ActiveSupport")
+unless Object.const_defined?('ActiveSupport')
   class String
     def camelize(first_letter = :upper)
       case first_letter
@@ -17,7 +17,6 @@ unless Object.const_defined?("ActiveSupport")
       Garb::Inflector.demodulize(self)
     end
   end
-
 
   module Garb
     module Inflector

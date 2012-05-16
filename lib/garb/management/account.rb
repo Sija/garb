@@ -15,7 +15,7 @@ module Garb
 
       def self.all(session = Session)
         feed = Feed.new(session, '/accounts')
-        feed.entries.map {|entry| new(entry, session)}
+        feed.entries.map { |entry| new(entry, session) }
       end
 
       def web_properties

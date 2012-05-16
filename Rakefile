@@ -15,11 +15,11 @@ spec = Gem::Specification.new do |s|
   s.authors           = ['Tony Pitale']
   s.email             = 'tony.pitale@viget.com'
   s.homepage          = 'http://github.com/vigetlabs/garb'
-  s.files             = %w(README.md CHANGELOG.md Rakefile) + Dir.glob("lib/**/*")
+  s.files             = %w(README.md CHANGELOG.md Rakefile) + Dir.glob('lib/**/*')
   s.test_files        = Dir.glob("test/**/*")
 
-  s.add_dependency("crack", [">= 0.1.6"])
-  s.add_dependency("activesupport", [">= 2.2.0"])
+  s.add_dependency('crack', ['>= 0.1.6'])
+  s.add_dependency('activesupport', ['>= 2.2.0'])
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -28,7 +28,7 @@ end
 
 Rake::TestTask.new do |t|
   t.libs << 'test'
-  t.test_files = FileList["test/**/*_test.rb"]
+  t.test_files = FileList['test/**/*_test.rb']
   t.verbose = true
 end
 
@@ -42,9 +42,9 @@ end
 begin
   require 'rcov/rcovtask'
 
-  desc "Generate RCov coverage report"
+  desc 'Generate RCov coverage report'
   Rcov::RcovTask.new(:rcov) do |t|
-    t.libs << "test"
+    t.libs << 'test'
     t.test_files = FileList['test/**/*_test.rb']
     t.rcov_opts << "-x \"test/*,gems/*,/Library/Ruby/*,config/*\" -x lib/garb.rb -x lib/garb/version.rb --rails"
   end

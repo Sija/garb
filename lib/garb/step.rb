@@ -3,7 +3,7 @@ module Garb
     attr_reader :name, :number, :url
 
     def initialize(attributes)
-      return unless attributes.is_a?(Hash)
+      return unless attributes.is_a? Hash
 
       @name = attributes['name']
       @number = attributes['number']

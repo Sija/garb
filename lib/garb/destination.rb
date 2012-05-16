@@ -5,13 +5,13 @@ module Garb
     alias :case_sensitive? :case_sensitive
 
     def initialize(attributes)
-      return unless attributes.is_a?(Hash)
+      return unless attributes.is_a? Hash
 
       @match_type = attributes['matchType']
       @url = attributes['url'] # TODO was @expression
       @case_sensitive = attributes['caseSensitive']
 
-      @steps = attributes["steps"].map{|s| Step.new(s)}
+      @steps = attributes['steps'].map { |s| Step.new(s) }
     end
   end
 end

@@ -44,8 +44,6 @@ end
 # require 'garb/report'
 
 module Garb
-  GA = "http://schemas.google.com/analytics/2008"
-
   extend self
 
   class << self

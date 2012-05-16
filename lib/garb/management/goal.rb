@@ -11,7 +11,7 @@ module Garb
 
       def self.all(session = Session, path = '/accounts/~all/webproperties/~all/profiles/~all/goals')
         feed = Feed.new(session, path)
-        feed.entries.map {|entry| new(entry, session)}
+        feed.entries.map { |entry| new(entry, session) }
       end
 
       def self.for_account(account)
@@ -32,7 +32,7 @@ module Garb
       end
 
       def destination
-        @destination ||= Destination.new(@entry["urlDestinationDetails"])
+        @destination ||= Destination.new(@entry['urlDestinationDetails'])
       end
     end
   end

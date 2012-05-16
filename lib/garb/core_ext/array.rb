@@ -1,4 +1,4 @@
-unless Object.const_defined?("ActiveSupport")
+unless Object.const_defined?('ActiveSupport')
   class Array
     def self.wrap(object)
       if object.nil?
@@ -10,6 +10,4 @@ unless Object.const_defined?("ActiveSupport")
       end
     end
   end
-else
-  puts "ActiveSupport is suddenly defined!"
 end

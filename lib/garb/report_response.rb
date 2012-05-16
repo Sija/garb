@@ -12,7 +12,6 @@ module Garb
         @results.total_results = parse_total_results
         @results.sampled = parse_sampled_flag
       end
-
       @results
     end
 
@@ -22,9 +21,7 @@ module Garb
     private
     def parse
       rows.map do |row|
-        @instance_klass.new(Hash[
-          *keys.zip(row).flatten
-        ])
+        @instance_klass.new(Hash[*keys.zip(row).flatten])
       end
     end
 

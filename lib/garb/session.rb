@@ -4,7 +4,7 @@ module Garb
       attr_accessor :auth_token, :access_token, :email
 
       # use only for single user authentication
-      def login(email, password, opts={})
+      def login(email, password, opts = {})
         self.email = email
         auth_request = Request::Authentication.new(email, password, opts)
         self.auth_token = auth_request.auth_token(opts)

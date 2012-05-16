@@ -18,7 +18,7 @@ module Garb
     end
 
     def to_params
-      value = self.elements.map{|param| Garb.to_google_analytics(param)}.join(',')
+      value = self.elements.map { |param| Garb.to_google_analytics(param) }.join(',')
       value.empty? ? {} : {self.name => value}
     end
   end

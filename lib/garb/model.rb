@@ -68,7 +68,7 @@ module Garb
     end
 
     def build_params(param_set)
-      param_set.inject({}) {|p,i| p.merge(i)}.reject{|k,v| v.nil?}
+      param_set.inject({}) { |p,i| p.merge(i) }.reject { |k,v| v.nil? }
     end
 
     def parse_filters(options)

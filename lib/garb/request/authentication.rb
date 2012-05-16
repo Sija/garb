@@ -1,11 +1,11 @@
 module Garb
   module Request
     class Authentication
-      class AuthError < StandardError;end
+      class AuthError < StandardError; end
 
       URL = 'https://www.google.com/accounts/ClientLogin'
 
-      def initialize(email, password, opts={})
+      def initialize(email, password, opts = {})
         @email = email
         @password = password
         @account_type = opts.fetch(:account_type, 'HOSTED_OR_GOOGLE')
@@ -50,7 +50,6 @@ module Garb
         ssl_mode = opts[:secure] ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE
         send_request(ssl_mode).body.match(/^Auth=(.*)$/)[1]
       end
-
     end
   end
 end
