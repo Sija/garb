@@ -7,7 +7,7 @@ module Garb
     end
     
     def to_s
-      "#{code ? "[#{code}] #{message}" : message} (for URI = #{uri})"
+      "#{code ? "[#{code}] #{message}" : message} : #{uri}"
     end
   end
   class BadRequestError < ClientError; end
