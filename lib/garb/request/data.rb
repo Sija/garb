@@ -5,6 +5,10 @@ module Garb
     def initialize(message, code = nil, errors = [])
       @code, @message, @errors = code, message, errors
     end
+    
+    def to_s
+      "[#{code || 0}] #{message}"
+    end
   end
   class BadRequestError < ClientError; end
   class InvalidCredentialsError < ClientError; end

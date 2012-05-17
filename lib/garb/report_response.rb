@@ -16,11 +16,11 @@ module Garb
     end
 
     def total_results
-      data[:total_results].to_i
+      data[:total_results]
     end
 
     def sampled?
-      data[:contains_sampled_data] != 'false'
+      data[:contains_sampled_data]
     end
 
     private
