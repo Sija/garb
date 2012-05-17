@@ -1,8 +1,8 @@
 module Garb
   module Model
     MONTH = 2592000
-    #URL = "https://www.google.com/analytics/feeds/data"
-    URL = "https://www.googleapis.com/analytics/v3/data/ga"
+    #URL = 'https://www.google.com/analytics/feeds/data'
+    URL = 'https://www.googleapis.com/analytics/v3/data/ga'
 
     def self.extended(base)
       ProfileReports.add_report_method(base)
@@ -27,9 +27,8 @@ module Garb
     end
 
     def results(profile, options = {})
-      if options.delete(:all)
-        return all(profile, options)
-      end
+      return self.all(profile, options) if options.delete(:all)
+
       start_date = options.fetch(:start_date, Time.now - MONTH)
       end_date = options.fetch(:end_date, Time.now)
       default_params = build_default_params(profile, start_date, end_date)
@@ -43,7 +42,6 @@ module Garb
         parse_sort(options).to_params,
         build_page_params(options)
       ]
-
       data = send_request_for_data(profile, build_params(param_set))
       ReportResponse.new(data, instance_klass).results
     end
@@ -51,11 +49,15 @@ module Garb
     def all(profile, options = {})
       limit = options.delete(:limit)
       options[:limit] = 10_000 # maximum allowed
-      results = []
-      while ((rs = results(profile, options).to_a) && !rs.empty?)
-        results.concat rs
-        break if limit and results.size >= limit
+      results = nil
+      while ((rs = results(profile, options)) && !rs.empty?)
+        results \
+          ? results.concat(rs.to_a)
+          : results = rs
         options[:offset] = results.size
+        
+        break if limit and results.size >= limit
+        break if results.size >= results.total_results
       end
       limit ? results[0...limit] : results
     end
@@ -68,7 +70,7 @@ module Garb
     end
 
     def build_params(param_set)
-      param_set.inject({}) { |p,i| p.merge(i) }.reject { |k,v| v.nil? }
+      param_set.inject({}) { |p,i| p.merge i }.reject { |k,v| v.nil? }
     end
 
     def parse_filters(options)

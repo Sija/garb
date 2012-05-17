@@ -2,26 +2,32 @@ module Garb
   class ReportResponse
 
     def initialize(response_body, instance_klass = OpenStruct)
-      @data = response_body
+      @response_body = response_body
       @instance_klass = instance_klass
     end
 
     def results
       if @results.nil?
-        if defined?(Rails) and Rails.logger
-          Rails.logger.debug "Garb::ReportResponse -> #{parsed_data.inspect}"
-        end
         @results = ResultSet.new(parse)
-        @results.total_results = parse_total_results
-        @results.sampled = parse_sampled_flag
+        @results.total_results = total_results
+        @results.sampled = sampled?
       end
       @results
     end
 
+    def total_results
+      data[:total_results].to_i
+    end
+
     def sampled?
+      data[:contains_sampled_data] != 'false'
     end
 
     private
+    def keys
+      @keys ||= column_headers.map { |header| Garb.from_ga header['name'] }
+    end
+
     def parse
       rows.map do |row|
         @instance_klass.new(Hash[*keys.zip(row).flatten])
@@ -29,27 +35,23 @@ module Garb
     end
 
     def column_headers
-      parsed_data['columnHeaders']
-    end
-
-    def keys
-      column_headers.map { |header| Garb.from_ga(header['name']) }
+      data[:column_headers] || []
     end
 
     def rows
-      parsed_data['rows'] || []
+      data[:rows] || []
     end
 
-    def parse_total_results
-      parsed_data['totalResults'].to_i
-    end
-
-    def parse_sampled_flag
-      parsed_data['containsSampledData']
-    end
-
-    def parsed_data
-      @parsed_data ||= JSON.parse(@data)
+    def data
+      unless @data
+        @data = JSON.parse @response_body
+        @data = @data.inject({}) do |data, pair|
+          key, value = pair
+          data[key.underscore.to_sym] = value
+          data
+        end
+      end
+      @data
     end
   end
 end

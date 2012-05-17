@@ -2,16 +2,20 @@ module Garb
   class ClientError < StandardError
     attr_reader :code, :message, :errors
     
-    def initialize(code, message, errors = [])
+    def initialize(message, code = nil, errors = [])
       @code, @message, @errors = code, message, errors
     end
   end
+  class BadRequestError < ClientError; end
+  class InvalidCredentialsError < ClientError; end
+  class InsufficientPermissionsError < ClientError; end
+  class BackendError < ClientError; end
   
   module Request
     class Data
-      attr_writer :format
-
       def initialize(session, base_url, parameters = {})
+        parameters.merge!('key' => Garb.api_key) unless Garb.api_key.nil?
+        
         @session = session
         @base_url = base_url
         @parameters = parameters
@@ -22,14 +26,8 @@ module Garb
       end
 
       def query_string
-        parameters.merge!('key' => Garb.api_key) unless Garb.api_key.nil?
-        parameters.merge!('alt' => format)
         parameter_list = parameters.map { |k,v| "#{k}=#{v}" }
         parameter_list.empty? ? '' : "?#{parameter_list.join('&')}"
-      end
-
-      def format
-        @format ||= 'json' # TODO Support other formats?
       end
 
       def uri
@@ -37,8 +35,8 @@ module Garb
       end
 
       def send_request
-        if defined?(Rails) and Rails.logger
-          Rails.logger.debug "Garb::Request -> #{uri.path}#{query_string}"
+        if defined?(Rails) and Rails.env == 'development'
+          Rails.logger.try :debug, "Garb::Request -> #{uri.path}#{query_string}"
         end
         
         response = if @session.single_user?
@@ -49,10 +47,17 @@ module Garb
 
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
           body = JSON.parse(response.body) rescue nil
-          if body
-            raise ClientError.new(body['error']['code'], body['error']['code'], body['error']['errors'])
+          if body and error = body['error']
+            klass = case error['code']
+              when 400 then BadRequestError
+              when 401 then InvalidCredentialsError
+              when 403 then InsufficientPermissionsError
+              when 503 then BackendError
+              else ClientError
+            end
+            raise klass.new(error['message'], error['code'], error['errors'])
           else
-            raise ClientError, response.body.inspect
+            raise ClientError, response ? response.body.inspect : nil
           end
         end
         response

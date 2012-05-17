@@ -28,7 +28,7 @@ module Garb
       end
 
       def goals
-        Goal.for_profile(self)
+        Goal.for_profile self
       end
     end
   end

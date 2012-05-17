@@ -1,7 +1,7 @@
 module Garb
   module Management
     class Feed
-      BASE_URL = "https://www.googleapis.com/analytics/v3/management"
+      BASE_URL = 'https://www.googleapis.com/analytics/v3/management'
 
       attr_reader :request
 
