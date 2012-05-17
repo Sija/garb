@@ -5,6 +5,10 @@ module Garb
     def initialize(message, code = nil, errors = [])
       @code, @message, @errors = code, message, errors
     end
+    
+    def to_s
+      code ? "[#{code}] #{message}" : message
+    end
   end
   class BadRequestError < ClientError; end
   class InvalidCredentialsError < ClientError; end
@@ -35,7 +39,7 @@ module Garb
       end
 
       def send_request
-        if defined?(Rails) and Rails.env == 'development'
+        if defined?(Rails)
           Rails.logger.try :debug, "Garb::Request -> #{uri.path}#{query_string}"
         end
         
