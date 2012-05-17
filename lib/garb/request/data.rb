@@ -1,13 +1,13 @@
 module Garb
   class ClientError < StandardError
-    attr_reader :code, :message, :errors
+    attr_reader :code, :message, :errors, :uri
     
-    def initialize(message, code = nil, errors = [])
-      @code, @message, @errors = code, message, errors
+    def initialize(message, code = nil, errors = [], uri = nil)
+      @code, @message, @errors, @uri = code, message, errors, uri
     end
     
     def to_s
-      code ? "[#{code}] #{message}" : message
+      "#{code ? "[#{code}] #{message}" : message} (for URI = #{uri})"
     end
   end
   class BadRequestError < ClientError; end
@@ -59,7 +59,7 @@ module Garb
               when 503 then BackendError
               else ClientError
             end
-            raise klass.new(error['message'], error['code'], error['errors'])
+            raise klass.new(error['message'], error['code'], error['errors'], uri)
           else
             raise ClientError, response ? response.body.inspect : nil
           end
