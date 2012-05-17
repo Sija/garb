@@ -59,7 +59,7 @@ module Garb
               when 503 then BackendError
               else ClientError
             end
-            raise klass.new(error['message'], error['code'], error['errors'], uri)
+            raise klass.new(error['message'], error['code'], error['errors'], uri.to_s + query_string)
           else
             raise ClientError, response ? response.body.inspect : nil
           end
