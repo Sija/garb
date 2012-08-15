@@ -4,7 +4,7 @@ module Garb
       extend Attributes
       include PathAttribute
 
-      attr_reader :session
+      attr_reader :session, :entry
       ga_attribute :id, { :account_id => "accountId" }
 
       def self.all(session = Session, path='/accounts/~all/webproperties')
