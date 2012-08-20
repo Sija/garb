@@ -17,12 +17,12 @@ module Garb
           'Passwd'      => @password,
           'accountType' => @account_type,
           'service'     => 'analytics',
-          'source'      => "garb/v#{Garb::VERSION}"
+          'source'      => "sija-garb-v#{Garb::VERSION}"
         }
       end
 
       def uri
-        URI.parse(URL)
+        @uri ||= URI.parse(URL)
       end
 
       def send_request(ssl_mode)
@@ -46,7 +46,7 @@ module Garb
         post
       end
 
-      def auth_token(opts={})
+      def auth_token(opts = {})
         ssl_mode = opts[:secure] ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE
         send_request(ssl_mode).body.match(/^Auth=(.*)$/)[1]
       end
