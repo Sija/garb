@@ -40,7 +40,7 @@ module Garb
 
       def send_request
         if defined?(Rails)
-          Rails.logger.try :debug, "Garb::Request -> #{uri.path}#{query_string}"
+          Rails.logger.try :info, "Garb::Request -> #{uri.path}#{query_string}"
         end
         
         response = if @session.single_user?

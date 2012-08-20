@@ -79,7 +79,7 @@ module Garb
 
     def parse_segment(options)
       segment_id = "gaid::#{options[:segment_id].to_i}" if options.has_key?(:segment_id)
-      {'segment' => segment_id}
+      { 'segment' => segment_id }
     end
 
     def parse_sort(options)

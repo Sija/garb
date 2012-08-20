@@ -5,15 +5,15 @@ module Garb
       include PathAttribute
 
       attr_reader :session, :entry
-      ga_attribute :id, :name, { :account_id => "accountId" }, { :website_url => "websiteUrl" }
+      ga_attribute :id, :name, { :account_id => 'accountId' }, { :website_url => 'websiteUrl' }
 
-      def self.all(session = Session, path='/accounts/~all/webproperties')
+      def self.all(session = Session, path = '/accounts/~all/webproperties')
         feed = Feed.new(session, path)
-        feed.entries.map {|entry| new(entry, session)}
+        feed.entries.map { |entry| new(entry, session) }
       end
 
       def self.for_account(account)
-        all(account.session, account.path+'/webproperties')
+        all(account.session, account.path + '/webproperties')
       end
 
       def initialize(entry, session)

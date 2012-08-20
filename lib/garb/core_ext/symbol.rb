@@ -34,7 +34,7 @@ end
 
 symbol_slugs = []
 
-if Object.const_defined?("DataMapper")
+if Object.const_defined?('DataMapper')
   # make sure the class is defined
   require 'dm-core/core_ext/symbol'
 
