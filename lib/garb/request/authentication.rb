@@ -17,7 +17,7 @@ module Garb
           'Passwd'      => @password,
           'accountType' => @account_type,
           'service'     => 'analytics',
-          'source'      => "sija-garb-v#{Garb::Version}"
+          'source'      => "sija-garb-v#{Garb::VERSION}"
         }
       end
 

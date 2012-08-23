@@ -10,10 +10,9 @@ rescue LoadError
   require 'json'
 end
 
-# FIXME: CODE SMELL
-$: << File.dirname(__FILE__)
-
 module Garb
+  autoload :VERSION,          'garb/version'
+  
   autoload :Attributes,       'garb/attributes'
   autoload :PathAttribute,    'garb/path_attribute'
   autoload :Destination,      'garb/destination'
@@ -25,7 +24,6 @@ module Garb
   autoload :ResultSet,        'garb/result_set'
   autoload :Session,          'garb/session'
   autoload :Step,             'garb/step'
-  autoload :Version,          'garb/version'
 
   module Management
     autoload :Account,     'garb/management/account'
@@ -81,4 +79,4 @@ module Garb
   # probably just support open_timeout
 end
 
-require 'garb/support'
+require File.expand_path('garb/support', File.dirname(__FILE__))
