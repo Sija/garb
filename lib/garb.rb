@@ -10,6 +10,9 @@ rescue LoadError
   require 'json'
 end
 
+# FIXME: CODE SMELL
+$: << File.dirname(__FILE__)
+
 module Garb
   autoload :Attributes,       'garb/attributes'
   autoload :PathAttribute,    'garb/path_attribute'
@@ -34,7 +37,7 @@ module Garb
   end
 
   module Request
-    autoload :Authentication, "garb/request/authentication"
+    autoload :Authentication, 'garb/request/authentication'
     autoload :Data,           'garb/request/data'
   end
 end
