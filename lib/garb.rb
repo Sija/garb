@@ -38,7 +38,23 @@ module Garb
     autoload :Authentication, 'garb/request/authentication'
     autoload :Data,           'garb/request/data'
   end
-end
+
+  class ClientError < StandardError
+    attr_reader :code, :message, :errors, :uri
+    
+    def initialize(message, code = nil, errors = [], uri = nil)
+      @code, @message, @errors, @uri = code, message, errors, uri
+    end
+    
+    def to_s
+      "#{code ? "[#{code}] #{message}" : message} : #{uri}"
+    end
+  end
+  class BadRequestError < ClientError; end
+  class InvalidCredentialsError < ClientError; end
+  class InsufficientPermissionsError < ClientError; end
+  class BackendError < ClientError; end
+ end
 
 # require 'garb/account_feed_request'
 # require 'garb/resource'

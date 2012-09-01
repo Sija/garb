@@ -7,6 +7,7 @@ gem 'rake'
 
 group :test do
   gem 'shoulda'
+  gem 'shoulda-context'
   gem 'simplecov'
   gem 'minitest', :require => false
   gem 'jferris-mocha', :require => false

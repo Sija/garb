@@ -1,7 +1,8 @@
 #!/usr/bin/env rake
-require 'rake/gempackagetask'
-require 'rake/testtask'
+
+require 'rubygems/package_task' 
 require 'bundler/gem_tasks'
+require 'rake/testtask'
 
 $:.unshift File.expand_path('../lib', __FILE__)
 require 'garb'
@@ -26,7 +27,5 @@ begin
 rescue LoadError
   nil
 end
-
-task :default => 'test'
 
 # EOF

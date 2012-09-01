@@ -21,7 +21,7 @@ module Garb
               'Passwd'      => 'fuzzybunnies',
               'accountType' => 'HOSTED_OR_GOOGLE',
               'service'     => 'analytics',
-              'source'      => 'vigetLabs-garb-001'
+              'source'      => "sija-garb-v#{Garb::VERSION}"
             }
 
           request = Request::Authentication.new('user@example.com', 'fuzzybunnies')

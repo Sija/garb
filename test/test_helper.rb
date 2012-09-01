@@ -10,7 +10,7 @@ begin
 
   SimpleCov.start 'garb'
 rescue LoadError
-  puts "Install simplecov if you use 1.9 and want coverage metrics"
+  puts 'Install simplecov if you use 1.9 and want coverage metrics'
 end
 
 $:.reject! { |e| e.include? 'TextMate' }
@@ -20,17 +20,16 @@ Bundler.setup(:default, :test)
 
 require 'shoulda'
 require 'minitest/unit'
+require 'minitest/autorun'
 require 'mocha'
 
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'garb'
 
 class MiniTest::Unit::TestCase
-  include Shoulda::InstanceMethods
-  extend Shoulda::ClassMethods
-  include Shoulda::Assertions
-  extend Shoulda::Macros
-  include Shoulda::Helpers
+  include Shoulda::Context::Assertions
+  include Shoulda::Context::InstanceMethods
+  extend Shoulda::Context::ClassMethods
 
   def read_fixture(filename)
     File.read(File.dirname(__FILE__) + "/fixtures/#{filename}")
@@ -42,3 +41,4 @@ class MiniTest::Unit::TestCase
 end
 
 MiniTest::Unit.autorun
+
