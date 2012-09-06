@@ -2,11 +2,7 @@ module Garb
   module Request
     class Data
       def initialize(session, base_url, parameters = {})
-        parameters.merge!('key' => Garb.api_key) unless Garb.api_key.nil?
-        
-        @session = session
-        @base_url = base_url
-        @parameters = parameters
+        @session, @base_url, @parameters = session, base_url, parameters
       end
 
       def parameters
@@ -14,8 +10,10 @@ module Garb
       end
 
       def query_string
-        parameter_list = parameters.map { |k,v| "#{k}=#{v}" }
-        parameter_list.empty? ? '' : "?#{parameter_list.join('&')}"
+        params = parameters.dup
+        params.merge!('key' => Garb::Session.api_key) unless Garb::Session.api_key.nil?
+        params_list = params.map { |k,v| "#{CGI::escape k}=#{CGI::escape v}" }.join('&')
+        params_list.empty? ? '' : "?#{params_list}"
       end
 
       def uri
@@ -23,16 +21,16 @@ module Garb
       end
 
       def send_request
-        if defined?(Rails)
-          Rails.logger.try :info, "Garb::Request -> #{uri.path}#{query_string}"
-        end
+        Garb.log "Garb::Request -> #{uri.path}#{query_string}"
         
         response = if @session.single_user?
           single_user_request
         elsif @session.oauth_user?
           oauth_user_request
         end
-
+        
+        Garb.log "Garb::Response -> #{response.inspect}"
+        
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
           body, parsed = response.body, JSON.parse(body) rescue nil
           if parsed and error = parsed['error']

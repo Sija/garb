@@ -46,16 +46,20 @@ module Garb
   extend self
 
   class << self
-    attr_accessor :proxy_address, :proxy_port, :proxy_user, :proxy_password, :api_key
+    attr_accessor :proxy_address, :proxy_port, :proxy_user, :proxy_password, :logger
     attr_writer   :read_timeout, :ca_cert_file
   end
 
   def read_timeout
     @read_timeout || 60
   end
-  
+
   def ca_cert_file
     @ca_cert_file || raise(MissingCertFileError)
+  end
+
+  def log(str)
+    logger.debug str unless logger.nil?
   end
 
   def to_google_analytics(thing)
