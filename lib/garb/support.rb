@@ -1,6 +1,6 @@
-unless Object.const_defined?('ActiveSupport')
-  require File.expand_path('core_ext/string', File.dirname(__FILE__))
-  require File.expand_path('core_ext/array', File.dirname(__FILE__))
+unless Object.const_defined? 'ActiveSupport'
+  require 'garb/core_ext/string'
+  require 'garb/core_ext/array'
 end
 
-require File.expand_path('core_ext/symbol', File.dirname(__FILE__))
+require 'garb/core_ext/symbol'

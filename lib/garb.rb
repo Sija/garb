@@ -1,3 +1,5 @@
+$:.unshift File.dirname(__FILE__)
+
 require 'net/http'
 require 'net/https'
 
@@ -38,38 +40,22 @@ module Garb
     autoload :Authentication, 'garb/request/authentication'
     autoload :Data,           'garb/request/data'
   end
-
-  class ClientError < StandardError
-    attr_reader :code, :message, :errors, :uri
-    
-    def initialize(message, code = nil, errors = [], uri = nil)
-      @code, @message, @errors, @uri = code, message, errors, uri
-    end
-    
-    def to_s
-      "#{code ? "[#{code}] #{message}" : message} : #{uri}"
-    end
-  end
-  class BadRequestError < ClientError; end
-  class InvalidCredentialsError < ClientError; end
-  class InsufficientPermissionsError < ClientError; end
-  class BackendError < ClientError; end
  end
-
-# require 'garb/account_feed_request'
-# require 'garb/resource'
-# require 'garb/report'
 
 module Garb
   extend self
 
   class << self
     attr_accessor :proxy_address, :proxy_port, :proxy_user, :proxy_password, :api_key
-    attr_writer   :read_timeout
+    attr_writer   :read_timeout, :ca_cert_file
   end
 
   def read_timeout
     @read_timeout || 60
+  end
+  
+  def ca_cert_file
+    @ca_cert_file || raise(MissingCertFileError)
   end
 
   def to_google_analytics(thing)
@@ -95,4 +81,5 @@ module Garb
   # probably just support open_timeout
 end
 
-require File.expand_path('garb/support', File.dirname(__FILE__))
+require 'garb/support'
+require 'garb/errors'

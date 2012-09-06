@@ -1,7 +1,5 @@
 require 'test_helper'
 
-CA_CERT_FILE = File.join(File.dirname(__FILE__), '..', '/cacert.pem')
-
 module Garb
   module Request
     class AuthenticationTest < MiniTest::Unit::TestCase
@@ -10,6 +8,7 @@ module Garb
 
         setup { @request = Request::Authentication.new('email', 'password') }
         teardown do
+          Garb.ca_cert_file = File.join(File.dirname(__FILE__), '..', '/cacert.pem')
           Garb.proxy_address = nil
           Garb.proxy_port = nil
         end
@@ -41,7 +40,7 @@ module Garb
             m.expects(:read_timeout=).with(Garb.read_timeout)
             m.expects(:use_ssl=).with(true)
             m.expects(:verify_mode=).with(OpenSSL::SSL::VERIFY_PEER)
-            m.expects(:ca_file=).with(CA_CERT_FILE)
+            m.expects(:ca_file=).with(Garb.ca_cert_file)
             m.expects(:request).with('post').yields(response)
           end
 
@@ -116,7 +115,7 @@ module Garb
 
           Net::HTTP.stubs(:new).with('www.google.com', 443, nil, nil).returns(http)
 
-          assert_raises(Garb::Request::Authentication::AuthError) do
+          assert_raises(Garb::AuthError) do
             @request.send_request(OpenSSL::SSL::VERIFY_NONE)
           end
         end

@@ -8,7 +8,7 @@ gem 'rake'
 group :test do
   gem 'shoulda'
   gem 'shoulda-context'
-  gem 'simplecov'
+  gem 'simplecov', :require => false
   gem 'minitest', :require => false
   gem 'jferris-mocha', :require => false
   gem 'yajl-ruby'

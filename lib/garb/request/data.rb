@@ -34,8 +34,8 @@ module Garb
         end
 
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
-          body = JSON.parse(response.body) rescue nil
-          if body and error = body['error']
+          body, parsed = response.body, JSON.parse(body) rescue nil
+          if parsed and error = parsed['error']
             klass = case error['code']
               when 400 then BadRequestError
               when 401 then InvalidCredentialsError
@@ -45,7 +45,7 @@ module Garb
             end
             raise klass.new(error['message'], error['code'], error['errors'], uri.to_s + query_string)
           else
-            raise ClientError, response ? response.body.inspect : nil
+            raise ClientError, body
           end
         end
         response
@@ -63,7 +63,7 @@ module Garb
       end
 
       def oauth_user_request
-        @session.access_token.get("#{uri}#{query_string}")
+        @session.access_token.get("#{uri}#{query_string}", {'GData-Version' => '3'})
       end
     end
   end
