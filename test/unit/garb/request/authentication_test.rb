@@ -37,6 +37,7 @@ module Garb
           response = mock {|m| m.expects(:is_a?).with(Net::HTTPOK).returns(true) }
 
           http = mock do |m|
+            m.expects(:open_timeout=).with(Garb.open_timeout)
             m.expects(:read_timeout=).with(Garb.read_timeout)
             m.expects(:use_ssl=).with(true)
             m.expects(:verify_mode=).with(OpenSSL::SSL::VERIFY_PEER)
@@ -55,6 +56,7 @@ module Garb
           response = mock {|m| m.expects(:is_a?).with(Net::HTTPOK).returns(true) }
 
           http = mock do |m|
+            m.expects(:open_timeout=).with(Garb.open_timeout)
             m.expects(:read_timeout=).with(Garb.read_timeout)
             m.expects(:use_ssl=).with(true)
             m.expects(:verify_mode=).with(OpenSSL::SSL::VERIFY_NONE)
@@ -108,6 +110,7 @@ module Garb
 
           http = stub do |s|
             s.stubs(:use_ssl=)
+            s.expects(:open_timeout=).with(Garb.open_timeout)
             s.expects(:read_timeout=).with(Garb.read_timeout)
             s.stubs(:verify_mode=)
             s.stubs(:request).yields(response)
@@ -126,6 +129,7 @@ module Garb
           response = stub {|s| s.stubs(:is_a?).returns(true) }
 
           http = mock do |m|
+            m.stubs(:open_timeout=)
             m.stubs(:read_timeout=)
             m.stubs(:use_ssl=)
             m.stubs(:verify_mode=)

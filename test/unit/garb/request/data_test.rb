@@ -119,6 +119,8 @@ module Garb
           response = mock
 
           http = mock do |m|
+            m.expects(:open_timeout=).with(Garb.open_timeout)
+            m.expects(:read_timeout=).with(Garb.read_timeout)
             m.expects(:use_ssl=).with(true)
             m.expects(:verify_mode=).with(OpenSSL::SSL::VERIFY_NONE)
             m.expects(:get).with('/data?key=value', {

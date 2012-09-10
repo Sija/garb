@@ -138,6 +138,15 @@ SSL
   For whatever reason, simply creating a new certificate store and setting the defaults would
   not validate the google ssl certificate as authentic.
 
+OPEN / READ TIMEOUT
+-------------------
+
+  The open and read timeout values used with the network client (Net::HTTP) are configurable.  Both 
+  values default to 60 seconds.  
+
+    Garb.open_timeout = 3
+    Garb.read_timeout = 3
+    
 TODOS
 -----
 

@@ -25,6 +25,7 @@ module Garb
 
       def send_request(ssl_mode)
         http = Net::HTTP.new(uri.host, uri.port, Garb.proxy_address, Garb.proxy_port)
+        http.open_timeout = Garb.open_timeout
         http.read_timeout = Garb.read_timeout
         http.use_ssl = true
         http.verify_mode = ssl_mode

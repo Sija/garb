@@ -47,7 +47,11 @@ module Garb
 
   class << self
     attr_accessor :proxy_address, :proxy_port, :proxy_user, :proxy_password, :logger
-    attr_writer   :read_timeout, :ca_cert_file
+    attr_writer   :open_timeout, :read_timeout, :ca_cert_file
+  end
+
+  def open_timeout
+    @open_timeout || 60
   end
 
   def read_timeout
@@ -80,9 +84,6 @@ module Garb
   end
 
   # new(address, port = nil, p_addr = nil, p_port = nil, p_user = nil, p_pass = nil)
-
-  # opts => open_timeout, read_timeout, ssl_timeout
-  # probably just support open_timeout
 end
 
 require 'garb/support'
