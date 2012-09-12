@@ -12,7 +12,7 @@ module Garb
       def query_string
         params = parameters.dup
         params.merge!('key' => Garb::Session.api_key) unless Garb::Session.api_key.nil?
-        params_list = params.map { |k,v| "#{CGI::escape k}=#{CGI::escape v}" }.join('&')
+        params_list = params.map { |k, v| "#{k}=#{v}" }.join('&')
         params_list.empty? ? '' : "?#{params_list}"
       end
 
