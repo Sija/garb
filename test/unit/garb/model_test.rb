@@ -41,7 +41,7 @@ module Garb
 
       context "with a profile" do
         setup do
-          entry = JSON.parse(read_fixture("ga_profile_management.json"))["items"].first
+          entry = MultiJson.load(read_fixture("ga_profile_management.json"))["items"].first
 
           @profile = Garb::Management::Profile.new(entry, Session)
         end

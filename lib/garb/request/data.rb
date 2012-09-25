@@ -32,7 +32,7 @@ module Garb
         Garb.log "Garb::Response -> #{response.inspect}"
         
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
-          body, parsed = response.body, JSON.parse(body) rescue nil
+          body, parsed = response.body, MultiJson.load(body) rescue nil
           if parsed and error = parsed['error']
             klass = case error['code']
               when 400 then BadRequestError

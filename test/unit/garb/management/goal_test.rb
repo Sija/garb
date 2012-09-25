@@ -37,7 +37,7 @@ module Garb
 
       context "a Goal" do
         setup do
-          entry = JSON.parse(read_fixture("goal_management.json"))["items"].first
+          entry = MultiJson.load(read_fixture("goal_management.json"))["items"].first
           @goal = Goal.new(entry, Session)
         end
 

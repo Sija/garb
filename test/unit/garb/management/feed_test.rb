@@ -11,11 +11,11 @@ module Garb
         end
 
         should "have a parsed response" do
-          JSON.stubs(:parse)
+          MultiJson.stubs(:load)
           @feed.stubs(:response).returns(stub(:body => 'response body'))
           @feed.parsed_response
 
-          assert_received(JSON, :parse) {|e| e.with('response body')}
+          assert_received(MultiJson, :load) {|e| e.with('response body')}
         end
 
         should "have entries from the parsed response" do

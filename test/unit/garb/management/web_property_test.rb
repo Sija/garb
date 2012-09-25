@@ -28,7 +28,7 @@ module Garb
 
       context "a WebProperty" do
         setup do
-          entry = JSON.parse(read_fixture("ga_webproperty_management.json"))["items"].first
+          entry = MultiJson.load(read_fixture("ga_webproperty_management.json"))["items"].first
 
           @web_property = WebProperty.new(entry, Session)
         end

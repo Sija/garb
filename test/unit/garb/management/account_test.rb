@@ -19,7 +19,7 @@ module Garb
 
       context "an Account" do
         setup do
-          entry = JSON.parse(read_fixture("account_management.json"))['items'].first
+          entry = MultiJson.load(read_fixture("account_management.json"))['items'].first
           @account = Account.new(entry, Session)
         end
 

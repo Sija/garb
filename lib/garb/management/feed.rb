@@ -10,7 +10,7 @@ module Garb
       end
 
       def parsed_response
-        @parsed_response ||= JSON.parse(response.body)
+        @parsed_response ||= MultiJson.load(response.body)
       end
 
       def entries

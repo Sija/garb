@@ -6,11 +6,7 @@ require 'net/https'
 require 'cgi'
 require 'ostruct'
 
-begin
-  require 'yajl/json_gem' # JSON.parse
-rescue LoadError
-  require 'json'
-end
+require 'multi_json'
 
 module Garb
   autoload :VERSION,          'garb/version'

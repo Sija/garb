@@ -38,7 +38,7 @@ module Garb
 
       should "return an empty array if there are no results" do
         response = ReportResponse.new("result json")
-        JSON.stubs(:parse).with("result json").returns({'rows' => []})
+        MultiJson.stubs(:load).with("result json").returns({'rows' => []})
 
         assert_equal [], response.results.to_a
       end
