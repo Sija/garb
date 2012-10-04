@@ -1,5 +1,5 @@
 class Pageviews
-  extend Garb::Resource
+  extend Garb::Model
 
   metrics :pageviews
 end

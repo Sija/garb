@@ -1,5 +1,5 @@
 class Bounces
-  extend Garb::Resource
+  extend Garb::Model
 
   metrics :bounces
 end

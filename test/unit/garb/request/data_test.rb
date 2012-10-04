@@ -17,7 +17,7 @@ module Garb
 
         should "be able to build the query string from parameters" do
           parameters = {'ids' => '12345', 'metrics' => 'country'}
-          data_request = Request::Data.new(@session, "", parameters)
+          data_request = Request::Data.new(@session, '', parameters)
 
           query_string = data_request.query_string
 
@@ -25,7 +25,7 @@ module Garb
 
           query_string.sub!(/^\?/, '')
 
-          assert_equal ["ids=12345", "metrics=country"], query_string.split('&').sort
+          assert_equal ['ids=12345', 'metrics=country'], query_string.split('&').sort
         end
 
         should "be able to build a uri" do

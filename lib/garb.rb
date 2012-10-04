@@ -58,12 +58,13 @@ module Garb
     @ca_cert_file || raise(MissingCertFileError)
   end
 
-  def log(str)
-    logger.debug str unless logger.nil?
+  def log(str, level = :debug)
+    level, str = str, level if str.is_a? Symbol
+    logger.send level, str unless logger.nil?
   end
 
   def to_google_analytics(thing)
-    return thing.to_google_analytics if thing.respond_to?(:to_google_analytics)
+    return thing.to_google_analytics if thing.respond_to? :to_google_analytics
 
     "#{$1}ga:#{$2}" if "#{thing.to_s.camelize(:lower)}" =~ /^(-)?(.*)$/
   end
@@ -73,13 +74,6 @@ module Garb
     thing.to_s.gsub(/^ga\:/, '').underscore
   end
   alias :from_ga :from_google_analytics
-
-  def symbol_operator_slugs
-    [:eql, :not_eql, :gt, :gte, :lt, :lte, :desc, :descending, :matches,
-      :does_not_match, :contains, :does_not_contain, :substring, :not_substring]
-  end
-
-  # new(address, port = nil, p_addr = nil, p_port = nil, p_user = nil, p_pass = nil)
 end
 
 require 'garb/support'

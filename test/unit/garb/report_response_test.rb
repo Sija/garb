@@ -34,11 +34,21 @@ module Garb
           response = ReportResponse.new(@json)
           assert_equal true, response.results.sampled?
         end
+
+        should "return results as ResultSet which acts as Array proxy" do
+          response = ReportResponse.new(@json, SpecialKlass)
+          results = response.results
+          results_subset = results[0..1]
+          
+          assert_equal ResultSet, results.class
+          assert_equal ResultSet, results_subset.class
+          assert_equal results_subset.results, results.results[0..1]
+        end
       end
 
       should "return an empty array if there are no results" do
-        response = ReportResponse.new("result json")
-        MultiJson.stubs(:load).with("result json").returns({'rows' => []})
+        response = ReportResponse.new('result json')
+        MultiJson.stubs(:load).with('result json').returns({'rows' => []})
 
         assert_equal [], response.results.to_a
       end

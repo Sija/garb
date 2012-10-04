@@ -13,8 +13,6 @@ rescue LoadError
   puts 'Install simplecov if you use 1.9 and want coverage metrics'
 end
 
-$:.reject! { |e| e.include? 'TextMate' }
-
 require 'bundler'
 Bundler.setup(:default, :test)
 
@@ -41,4 +39,3 @@ class MiniTest::Unit::TestCase
 end
 
 MiniTest::Unit.autorun
-

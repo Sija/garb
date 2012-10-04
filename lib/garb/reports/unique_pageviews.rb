@@ -1,5 +1,5 @@
 class UniquePageviews
-  extend Garb::Resource
+  extend Garb::Model
 
   metrics :unique_pageviews
 end

@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Garb
   class ResultSet
     include Enumerable

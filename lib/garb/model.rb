@@ -6,6 +6,7 @@ module Garb
 
     def self.extended(base)
       ProfileReports.add_report_method(base)
+      # base.set_instance_klass(base)
     end
 
     def metrics(*fields)
@@ -27,7 +28,7 @@ module Garb
     end
 
     def results(profile, options = {})
-      return self.all(profile, options) if options.delete(:all)
+      return all_results(profile, options) if options.delete(:all)
 
       start_date = options.fetch(:start_date, Time.now - MONTH)
       end_date = options.fetch(:end_date, Time.now)
@@ -46,7 +47,7 @@ module Garb
       ReportResponse.new(data, instance_klass).results
     end
 
-    def all(profile, options = {})
+    def all_results(profile, options = {})
       limit = options.delete(:limit)
       options[:limit] = 10_000 # maximum allowed
       results = nil

@@ -28,7 +28,10 @@ module Garb
     private
     def array_to_params(arr)
       arr.map do |param|
-        param.is_a?(Hash) ? hash_to_params(param) : array_to_params(param)
+        case param
+        when Hash  then hash_to_params(param)
+        when Array then array_to_params(param)
+        end
       end.join(',') # Array OR
     end
 

@@ -1,22 +1,13 @@
-Garb
+Garb [![Build Status](https://secure.travis-ci.org/Sija/garb.png)](http://travis-ci.org/Sija/garb)
 ====
 
-  http://github.com/vigetlabs/garb
+  http://github.com/Sija/garb
 
 Important Changes
 =================
 
-  It has now been nearly 6 months, I have removed the deprecated features listed below in master.
-  I will release 0.9.2 shortly, with these features removed.
-
-  With The release of version 0.9.0 I have officially deprecated Garb::Report, Garb::Resource,
-  Garb::Profile, and Garb::Account. Garb::Report and Garb::Resource should be replaced by Garb::Model.
-  Garb::Profile and Garb::Account are supplanted by their Garb::Management::* counterparts.
-  
-  I'll be working hard to update the documentation over the next day or so to highlight all of the
-  old features in the new classes, as well as any new features brought by the new classes. If you
-  are looking for something in particular, please open an issue and I will try to prioritize these
-  requests.
+  This fork contains heavily modified version of vigetlab's `Garb` library.
+  It works only with version 3 of Google API.
 
   Please read CHANGELOG
 
@@ -25,7 +16,7 @@ Description
 
   Provides a Ruby API to the Google Analytics API.
 
-  http://code.google.com/apis/analytics/docs/gdata/gdataDeveloperGuide.html
+  https://developers.google.com/analytics/devguides/reporting/core/v3/coreDevguide
 
 Basic Usage
 ===========
@@ -33,6 +24,7 @@ Basic Usage
 Single User Login
 -----------------
   
+    > Garb::Session.api_key = api_key # required for 2-step authentication
     > Garb::Session.login(username, password)
     
 OAuth Access Token
@@ -81,6 +73,7 @@ Other Parameters
   * end_date: The date to end, inclusive
   * limit: The maximum number of results to be returned
   * offset: The starting index
+  * all: Return all results if true (which might result in several requests to GAPI)
 
 Metrics & Dimensions
 --------------------
@@ -89,7 +82,7 @@ Metrics & Dimensions
 
   I suggest reading the google documentation to familiarize yourself with this.
 
-  http://code.google.com/apis/analytics/docs/gdata/gdataReferenceDimensionsMetrics.html#bounceRate
+  https://developers.google.com/analytics/devguides/reporting/core/dimsmets#q=bouncerate
 
   When you've returned, you can pass the appropriate combinations to Garb, as symbols.
 
@@ -98,7 +91,7 @@ Filtering
 
   Google Analytics supports a significant number of filtering options.
 
-  http://code.google.com/apis/analytics/docs/gdata/gdataReference.html#filtering
+  https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters
 
   Here is what we can do currently:
   (the operator is a method on a symbol for the appropriate metric or dimension)
@@ -133,7 +126,7 @@ SSL
     Garb::Session.login(username, password, :secure => true)
 
   Next, be sure to download http://curl.haxx.se/ca/cacert.pem into your application somewhere.
-  Then, define a constant CA_CERT_FILE and point to that file.
+  Then, point `Garb.ca_cert_file` property to that file.
 
   For whatever reason, simply creating a new certificate store and setting the defaults would
   not validate the google ssl certificate as authentic.
@@ -141,8 +134,8 @@ SSL
 OPEN / READ TIMEOUT
 -------------------
 
-  The open and read timeout values used with the network client (Net::HTTP) are configurable.  Both 
-  values default to 60 seconds.  
+  The open and read timeout values used with the network client (Net::HTTP) are configurable.
+  Both values default to 60 seconds.  
 
     Garb.open_timeout = 3
     Garb.read_timeout = 3
@@ -155,8 +148,8 @@ TODOS
 Requirements
 ------------
 
-  * crack >= 0.1.6
-  * active_support >= 2.2.0
+  * active_support >= 2.2
+  * multi_json >= 1.3
 
 Requirements for Testing
 ------------------------
@@ -168,7 +161,15 @@ Requirements for Testing
 Install
 -------
 
-    gem install garb OR with bundler: gem 'garb' and `bundle install`
+    From git:
+    
+    `git clone git://github.com/Sija/garb.git`
+    `cd garb && rake install`
+    
+    OR with bundler:
+    
+    gem 'garb', :git => 'git://github.com/Sija/garb.git'
+    `bundle install`
 
 Contributors
 ------------
@@ -179,6 +180,7 @@ Contributors
   * Justin Marney
   * Nick Plante
   * James Cook
+  * Chris Gunther
 
 License
 -------

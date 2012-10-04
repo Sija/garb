@@ -1,3 +1,37 @@
+Version 0.9.6
+
+  * Swapped Yajl/JSON for MultiJson
+  * Fixed "NameError: uninitialized constant Forwardable"
+  * Updated README
+
+Version 0.9.5
+
+  * Moved all Garb::*Error classes to separate file
+  * Made all Garb::*Error classes inherit from Garb::Error
+  * Fixed couple of outstanding failing tests
+  * CA_CERT_FILE -> Garb.ca_cert_file
+  * API key as an element of the session
+  * Added `Garb.logger` module attribute
+  * Logs responses coming from GAPI (if logger set)
+  * Adds open_timeout support for Net::HTTP requests
+  * Added Travis CI configuration file
+
+Version 0.9.4
+
+  * Fixed fetching all records
+  * Adds custom error classes inheriting from ClientError
+  * Made error messages a bit more descriptive
+  * Adds WebsiteProperty#name and #website_url properties
+  * Made Garb report its version with each request
+  * Made FilterParameter#hash_to_params do not escape backslash. Fixes #74
+  * Code cleanup
+
+Version 0.9.3
+
+  * Adds support for fetching all results to Garb::Model
+  * ClientError handles properly error code and message from returned JSON
+  * Switches to GAPI v3
+
 Version 0.9.2
 
   * Removed all deprecated features: Garb::Report, Garb::Resource, Garb::Profile, and Garb::Account
@@ -40,14 +74,14 @@ Version 0.4.0
 
 Version 0.3.2
 
-  * adds Profile.first which can be used to get the first profile with a table id, or web property id (UA number)
+  * Adds Profile.first which can be used to get the first profile with a table id, or web property id (UA number)
 
 Version 0.2.4
 
-  * requires happymapper from rubygems, version 0.2.5. Be sure to update.
+  * Requires happymapper from rubygems, version 0.2.5. Be sure to update
 
 Version 0.2.0
 
-  * makes major changes (compared to 0.1.0) to the way garb is used to build reports.
-  * There is now both a module that gets included for generating defined classes,
-  * slight changes to the way that the Report class can be used.
+  * Makes major changes (compared to 0.1.0) to the way garb is used to build reports
+  * There is now both a module that gets included for generating defined classes
+  * Slight changes to the way that the Report class can be used
