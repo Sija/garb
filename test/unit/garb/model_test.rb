@@ -50,7 +50,7 @@ module Garb
           setup do
             @response = stub(:body => "raw report data")
             Request::Data.stubs(:new).returns(stub(:send_request => @response))
-            @results = ['result'] * 10
+            @results = ResultSet.new(['result'] * 10)
             ReportResponse.stubs(:new).returns(stub(:results => @results))
 
             @test_model.stubs(:metrics).returns(stub(:to_params => {'metrics' => 'ga:visits'}))
@@ -125,6 +125,26 @@ module Garb
 
             assert_equal @results, @test_model.results(@profile)
             assert_received(ReportResponse, :new) {|e| e.with("raw report data", ResultKlass)}
+          end
+
+          should "be able to fetch multiple pages of results" do
+            @results.results = ['result'] * 3
+            @results.total_results = 25
+            results = @test_model.all_results(@profile)
+            assert_equal 27, results.size
+          end
+
+          should "be able to fetch multiple pages of results passing :all symbol" do
+            @results.results = ['result']
+            @results.total_results = 25
+            results = @test_model.results(@profile, :all => true)
+            assert_equal @results.total_results, results.size
+          end
+
+          should "be able to fetch multiple pages of results with a limit" do
+            @results.total_results = 25
+            results = @test_model.all_results(@profile, :limit => 1)
+            assert_equal 1, results.size
           end
         end
 
