@@ -6,11 +6,14 @@ module Garb
 
       context "An instance of the Request::Authentication class" do
 
-        setup { @request = Request::Authentication.new('email', 'password') }
-        teardown do
+        setup do
+          @request = Request::Authentication.new('email', 'password')
           Garb.ca_cert_file = File.join(File.dirname(__FILE__), '..', '/cacert.pem')
+        end
+        teardown do
           Garb.proxy_address = nil
           Garb.proxy_port = nil
+          Garb.ca_cert_file = nil
         end
 
         should "have a collection of parameters that include the email and password" do
@@ -69,7 +72,7 @@ module Garb
         end
 
         should "be able to build a request for the GAAPI service" do
-          params = "param"
+          params = 'param'
           @request.expects(:parameters).with().returns(params)
 
           post = mock
