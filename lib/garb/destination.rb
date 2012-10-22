@@ -11,7 +11,7 @@ module Garb
       @url = attributes['url'] # TODO was @expression
       @case_sensitive = attributes['caseSensitive']
 
-      @steps = attributes['steps'].map { |s| Step.new(s) }
+      @steps = attributes['steps'] && attributes['steps'].map { |s| Step.new(s) }
     end
   end
 end
