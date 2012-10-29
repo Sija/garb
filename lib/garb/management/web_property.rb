@@ -5,7 +5,7 @@ module Garb
       include PathAttribute
 
       attr_reader :session, :entry
-      ga_attribute :id, :name, { :account_id => 'accountId' }, { :website_url => 'websiteUrl' }
+      ga_attribute :id, :name, :account_id, :website_url
 
       def self.all(session = Session, path = '/accounts/~all/webproperties')
         feed = Feed.new(session, path)

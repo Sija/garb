@@ -7,7 +7,7 @@ module Garb
       extend Attributes
 
       attr_reader :session
-      ga_attribute :id, :name, { :account_id => 'accountId', :web_property_id => 'webPropertyId' }
+      ga_attribute :id, :name, :account_id, :web_property_id, :website_url
 
       def self.all(session = Session, path = '/accounts/~all/webproperties/~all/profiles')
         feed = Feed.new(session, path)

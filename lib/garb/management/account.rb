@@ -5,7 +5,6 @@ module Garb
       include PathAttribute
 
       attr_reader :session
-
       ga_attribute :id, :name
 
       def initialize(entry, session)
