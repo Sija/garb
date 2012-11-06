@@ -43,31 +43,14 @@ module Garb
         parse_sort(options).to_params,
         build_page_params(options)
       ]
-      data = send_request_for_data(profile, build_params(param_set))
+
+      data = unless options[:nonblocking]
+        send_request_for_data(profile, build_params(param_set))
+      else
+        send_nonblocking_request_for_data(profile, build_params(param_set))
+      end
+
       ReportResponse.new(data, instance_klass).results
-    end
-
-    def nonblocking_results(profile, options = {})
-      return all_results(profile, options) if options.delete(:all)
-
-      start_date = options.fetch(:start_date, Time.now - MONTH)
-      end_date = options.fetch(:end_date, Time.now)
-      default_params = build_default_params(profile, start_date, end_date)
-
-      param_set = [
-        default_params,
-        metrics.to_params,
-        dimensions.to_params,
-        parse_filters(options).to_params,
-        parse_segment(options),
-        parse_sort(options).to_params,
-        build_page_params(options)
-      ]
-      http = send_nonblocking_request_for_data(profile, build_params(param_set))
-      http.callback {
-        ReportResponse.new(http.response.body, instance_klass).results
-      }
-      http
     end
 
     def all_results(profile, options = {})
@@ -92,8 +75,9 @@ module Garb
     end
 
     def send_nonblocking_request_for_data(profile, params)
-      request = Request::Data.new(profile.session, URL, params)
-      request.send_nonblocking_request
+      http = Request::Data.new(profile.session, URL, params)
+      response = http.send_nonblocking_request
+      response.response
     end
 
     def build_params(param_set)

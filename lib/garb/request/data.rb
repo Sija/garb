@@ -70,30 +70,21 @@ module Garb
 
       def send_nonblocking_request
         Garb.log "Garb::Request -> #{uri.path}#{query_string}"
-        http = single_user_nonblocking_request
-        http.errback {
-          raise BadRequestError.new("connection failed")
-        }
-        http
+        if @session.single_user?
+          http = single_user_nonblocking_request
+          http.errback {
+            raise BadRequestError.new("connection failed")
+          }
+          http
+        else
+          raise BadRequestError.new("Nonblocking request only works for single user")
+        end
       end
 
       def single_user_nonblocking_request
-        http = EM::HttpRequest.new  bind: {
-                                      host: uri.host,
-                                      port: uri.port
-                                    },
-                                    connect_timeout: Garb.open_timeout,
-                                    inactivity_timeout: Garb.read_timeout,
-                                    ssl: {
-                                      verify_peer: false
-                                    },
-                                    proxy: {
-                                       host: Garb.proxy_address,
-                                       port: Garb.proxy_port,
-                                    }
+        http = EM::HttpRequest.new "#{uri.to_s}#{query_string}", verify_peer: false
 
-        http.get  query: query_string_nonblocking,
-                  head: {
+        http.get  head: {
                     'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
                     'GData-Version' => '3'
                   }
