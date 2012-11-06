@@ -2,10 +2,10 @@
 require File.expand_path('../lib/garb/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ['Tony Pitale', 'Sijawusz Pur Rahnama']
-  gem.email         = ['tony.pitale@viget.com', 'sija@sija.pl']
-  gem.homepage      = 'http://github.com/Sija/garb'
-  
+  gem.authors       = ['Tony Pitale', 'Sijawusz Pur Rahnama', 'Lukas Hodel']
+  gem.email         = ['tony.pitale@viget.com', 'sija@sija.pl', 'l.hodel@de.edenspiekermann.com']
+  gem.homepage      = 'http://github.com/codingluke/garb'
+
   gem.summary       = 'Google Analytics API Ruby Wrapper'
   gem.description   = ''
 
@@ -15,7 +15,9 @@ Gem::Specification.new do |gem|
   gem.name          = 'garb'
   gem.require_paths = ['lib']
   gem.version       = Garb::VERSION
-  
+
   gem.add_dependency 'activesupport', '>= 2.2'
   gem.add_dependency 'multi_json', '>= 1.3'
+  gem.add_dependency 'em-synchrony'
+  gem.add_dependency 'em-http-request'
 end
