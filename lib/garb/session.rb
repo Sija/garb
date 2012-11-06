@@ -8,6 +8,11 @@ module Garb
         self.email = email
         auth_request = Request::Authentication.new(email, password, opts)
         self.auth_token = auth_request.auth_token(opts)
+        # http = auth_request.auth_token
+        # http.callback {
+        #   self.auth_token = http.response.body.match(/^Auth=(.*)$/)[1]
+        # }
+        # http
       end
 
       def single_user?

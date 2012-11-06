@@ -16,21 +16,27 @@ module Garb
         params_list.empty? ? '' : "?#{params_list}"
       end
 
+      def query_string_nonblocking
+        params = parameters.dup
+        params[:key] = Garb::Session.api_key unless Garb::Session.api_key.nil?
+        params
+      end
+
       def uri
         @uri ||= URI.parse(@base_url)
       end
 
       def send_request
         Garb.log "Garb::Request -> #{uri.path}#{query_string}"
-        
+
         response = if @session.single_user?
           single_user_request
         elsif @session.oauth_user?
           oauth_user_request
         end
-        
+
         Garb.log "Garb::Response -> #{response.inspect}"
-        
+
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
           body, parsed = response.body, MultiJson.load(response.body) rescue nil
           if parsed and error = parsed['error']
@@ -60,6 +66,37 @@ module Garb
         else
           http.get("#{uri.path}#{query_string}", {'Authorization' => "GoogleLogin auth=#{@session.auth_token}", 'GData-Version' => '3'})
         end
+      end
+
+      def send_nonblocking_request
+        Garb.log "Garb::Request -> #{uri.path}#{query_string}"
+        http = single_user_nonblocking_request
+        http.errback {
+          raise BadRequestError.new("connection failed")
+        }
+        http
+      end
+
+      def single_user_nonblocking_request
+        http = EM::HttpRequest.new  bind: {
+                                      host: uri.host,
+                                      port: uri.port
+                                    },
+                                    connect_timeout: Garb.open_timeout,
+                                    inactivity_timeout: Garb.read_timeout,
+                                    ssl: {
+                                      verify_peer: false
+                                    },
+                                    proxy: {
+                                       host: Garb.proxy_address,
+                                       port: Garb.proxy_port,
+                                    }
+
+        http.get  query: query_string_nonblocking,
+                  head: {
+                    'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
+                    'GData-Version' => '3'
+                  }
       end
 
       def oauth_user_request

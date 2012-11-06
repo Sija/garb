@@ -47,6 +47,29 @@ module Garb
       ReportResponse.new(data, instance_klass).results
     end
 
+    def nonblocking_results(profile, options = {})
+      return all_results(profile, options) if options.delete(:all)
+
+      start_date = options.fetch(:start_date, Time.now - MONTH)
+      end_date = options.fetch(:end_date, Time.now)
+      default_params = build_default_params(profile, start_date, end_date)
+
+      param_set = [
+        default_params,
+        metrics.to_params,
+        dimensions.to_params,
+        parse_filters(options).to_params,
+        parse_segment(options),
+        parse_sort(options).to_params,
+        build_page_params(options)
+      ]
+      http = send_nonblocking_request_for_data(profile, build_params(param_set))
+      http.callback {
+        ReportResponse.new(http.response.body, instance_klass).results
+      }
+      http
+    end
+
     def all_results(profile, options = {})
       limit = options.delete(:limit)
       options[:limit] = 10_000 # maximum allowed
@@ -54,18 +77,23 @@ module Garb
       while ((rs = results(profile, options)) && !rs.empty?)
         results = results ? results + rs : rs
         options[:offset] = results.size + 1
-        
+
         break if limit and results.size >= limit
         break if results.size >= results.total_results
       end
       limit && results ? results[0...limit] : results
     end
-    
+
     private
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
       response = request.send_request
       response.body
+    end
+
+    def send_nonblocking_request_for_data(profile, params)
+      request = Request::Data.new(profile.session, URL, params)
+      request.send_nonblocking_request
     end
 
     def build_params(param_set)
