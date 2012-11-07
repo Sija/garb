@@ -43,7 +43,13 @@ module Garb
         parse_sort(options).to_params,
         build_page_params(options)
       ]
-      data = send_request_for_data(profile, build_params(param_set))
+
+      data = unless options[:nonblocking]
+        send_request_for_data(profile, build_params(param_set))
+      else
+        send_nonblocking_request_for_data(profile, build_params(param_set))
+      end
+
       ReportResponse.new(data, instance_klass).results
     end
 
@@ -54,18 +60,24 @@ module Garb
       while ((rs = results(profile, options)) && !rs.empty?)
         results = results ? results + rs : rs
         options[:offset] = results.size + 1
-        
+
         break if limit and results.size >= limit
         break if results.size >= results.total_results
       end
       limit && results ? results[0...limit] : results
     end
-    
+
     private
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
       response = request.send_request
       response.body
+    end
+
+    def send_nonblocking_request_for_data(profile, params)
+      http = Request::Data.new(profile.session, URL, params)
+      response = http.send_nonblocking_request
+      response.response
     end
 
     def build_params(param_set)

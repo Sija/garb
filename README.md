@@ -1,7 +1,7 @@
 Garb [![Build Status](https://secure.travis-ci.org/Sija/garb.png)](http://travis-ci.org/Sija/garb)
 ====
 
-  http://github.com/Sija/garb
+  http://github.com/codingluke/garb
 
 Important Changes
 =================
@@ -23,10 +23,10 @@ Basic Usage
 
 Single User Login
 -----------------
-  
+
     > Garb::Session.api_key = api_key # required for 2-step authentication
     > Garb::Session.login(username, password)
-    
+
 OAuth Access Token
 ------------------
 
@@ -65,6 +65,13 @@ Get the Results
     > profile.exits(:filters => {:page_path.eql => '/'})
 
   Be forewarned, these numbers are for the last **30** days and may be slightly different from the numbers displayed in Google Analytics' dashboard for **1 month**.
+
+Get the Results (nonblocking)
+_____________________________
+
+    > Exits.results(profile, :nonblocking => true)
+
+    Warning!! not working with OAuth Access Token!!!
 
 Other Parameters
 ----------------
@@ -113,7 +120,7 @@ Filtering
     does_not_contain => '!~',
     substring => '=@',
     not_substring => '!@'
-    
+
   Given the previous Exits example report in shorthand, we can add an option for filter:
 
     profile.exits(:filters => {:page_path.eql => '/extend/effectively-using-git-with-subversion/')
@@ -135,11 +142,11 @@ OPEN / READ TIMEOUT
 -------------------
 
   The open and read timeout values used with the network client (Net::HTTP) are configurable.
-  Both values default to 60 seconds.  
+  Both values default to 60 seconds.
 
     Garb.open_timeout = 3
     Garb.read_timeout = 3
-    
+
 TODOS
 -----
 
@@ -162,12 +169,12 @@ Install
 -------
 
     From git:
-    
+
     `git clone git://github.com/Sija/garb.git`
     `cd garb && rake install`
-    
+
     OR with bundler:
-    
+
     gem 'garb', :git => 'git://github.com/Sija/garb.git'
     `bundle install`
 

@@ -2,6 +2,7 @@ $:.unshift File.dirname(__FILE__)
 
 require 'net/http'
 require 'net/https'
+require 'em-synchrony/em-http'
 
 require 'cgi'
 require 'ostruct'
@@ -10,7 +11,7 @@ require 'multi_json'
 
 module Garb
   autoload :VERSION,          'garb/version'
-  
+
   autoload :Attributes,       'garb/attributes'
   autoload :PathAttribute,    'garb/path_attribute'
   autoload :Destination,      'garb/destination'
@@ -36,7 +37,7 @@ module Garb
     autoload :Authentication, 'garb/request/authentication'
     autoload :Data,           'garb/request/data'
   end
- end
+end
 
 module Garb
   extend self

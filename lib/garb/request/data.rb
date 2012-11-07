@@ -22,31 +22,34 @@ module Garb
 
       def send_request
         Garb.log "Garb::Request -> #{uri.path}#{query_string}"
-        
+
         response = if @session.single_user?
           single_user_request
         elsif @session.oauth_user?
           oauth_user_request
         end
-        
+
         Garb.log "Garb::Response -> #{response.inspect}"
-        
+
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
-          body, parsed = response.body, MultiJson.load(response.body) rescue nil
-          if parsed and error = parsed['error']
-            klass = case error['code']
-              when 400 then BadRequestError
-              when 401 then InvalidCredentialsError
-              when 403 then InsufficientPermissionsError
-              when 503 then BackendError
-              else ClientError
-            end
-            raise klass.new(error['message'], error['code'], error['errors'], uri.to_s + query_string)
-          else
-            raise ClientError, body
-          end
+          raise_appropriate_error(response.body)
         end
         response
+      end
+
+      def send_nonblocking_request
+        Garb.log "Garb::Request -> #{uri.path}#{query_string}"
+        if @session.single_user?
+          http = single_user_nonblocking_request
+
+          unless http.response_header.status == 200
+            raise_appropriate_error(http.response)
+          end
+
+          http
+        elsif @session.oauth_user?
+          raise InvalidCredentialsError.new("Nonblocking request don't works with OAuth access_token!")
+        end
       end
 
       def single_user_request
@@ -62,8 +65,30 @@ module Garb
         end
       end
 
+      def single_user_nonblocking_request
+        http = EM::HttpRequest.new "#{uri.to_s}#{query_string}", :verify_peer => false
+        http.get(:head => { 'Authorization' => "GoogleLogin auth=#{@session.auth_token}", 'GData-Version' => '3' })
+      end
+
       def oauth_user_request
         @session.access_token.get("#{uri}#{query_string}", {'GData-Version' => '3'})
+      end
+
+      private
+      def raise_appropriate_error(body = nil)
+          body, parsed = body, MultiJson.load(body) rescue nil
+          if parsed and error = parsed['error']
+            klass = case error['code']
+              when 400 then BadRequestError
+              when 401 then InvalidCredentialsError
+              when 403 then InsufficientPermissionsError
+              when 503 then BackendError
+              else ClientError
+            end
+            raise klass.new(error['message'], error['code'], error['errors'], uri.to_s + query_string)
+          else
+            raise ClientError, body
+          end
       end
     end
   end
