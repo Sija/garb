@@ -16,12 +16,6 @@ module Garb
         params_list.empty? ? '' : "?#{params_list}"
       end
 
-      def query_string_nonblocking
-        params = parameters.dup
-        params[:key] = Garb::Session.api_key unless Garb::Session.api_key.nil?
-        params
-      end
-
       def uri
         @uri ||= URI.parse(@base_url)
       end
@@ -82,12 +76,8 @@ module Garb
       end
 
       def single_user_nonblocking_request
-        http = EM::HttpRequest.new "#{uri.to_s}#{query_string}", verify_peer: false
-
-        http.get  head: {
-                    'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
-                    'GData-Version' => '3'
-                  }
+        http = EM::HttpRequest.new "#{uri.to_s}#{query_string}", :verify_peer => false
+        http.get(:head => { 'Authorization' => "GoogleLogin auth=#{@session.auth_token}", 'GData-Version' => '3' })
       end
 
       def oauth_user_request
