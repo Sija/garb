@@ -5,7 +5,7 @@ module Garb
   class ClientError < Error
     attr_reader :code, :message, :errors, :uri
     
-    def initialize(message, code = nil, errors = [], uri = nil)
+    def initialize(uri, message, code = nil, errors = [])
       @code, @message, @errors, @uri = code, message, errors, uri
     end
     

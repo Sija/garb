@@ -20,17 +20,32 @@ module Garb
         @uri ||= URI.parse(@base_url)
       end
 
+      def absolute_uri
+        uri.to_s + query_string
+      end
+
+      def relative_uri
+        uri.path.to_s + query_string
+      end
+
       def send_request
-        Garb.log "Garb::Request -> #{uri.path}#{query_string}"
+        Garb.log "Garb::Request -> #{relative_uri}"
         
         response = if @session.single_user?
-          single_user_request
+          if Garb.use_fibers
+            single_user_request_evented
+          else
+            single_user_request
+          end
         elsif @session.oauth_user?
           oauth_user_request
         end
         
         Garb.log "Garb::Response -> #{response.inspect}"
-        
+        handle_response response
+      end
+
+      def handle_response(response)
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
           body, parsed = response.body, MultiJson.load(response.body) rescue nil
           if parsed and error = parsed['error']
@@ -41,29 +56,43 @@ module Garb
               when 503 then BackendError
               else ClientError
             end
-            raise klass.new(error['message'], error['code'], error['errors'], uri.to_s + query_string)
+            raise klass.new(absolute_uri, error['message'], error['code'], error['errors'])
           else
-            raise ClientError, body
+            raise ClientError.new(absolute_uri, body)
           end
         end
         response
       end
 
+      def single_user_request_evented
+        req = nil
+        EM.run do
+          Fiber.new do
+            req = single_user_request
+            EM.stop_event_loop
+          end.resume
+        end
+        req
+      end
+
       def single_user_request
-        http = Net::HTTP.new(uri.host, uri.port, Garb.proxy_address, Garb.proxy_port)
-        http.open_timeout = Garb.open_timeout
-        http.read_timeout = Garb.read_timeout
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        unless @session.access_token.nil?
-          http.get("#{uri.path}#{query_string}", {'Authorization' => "Bearer #{@session.access_token.token}"})
-        else
-          http.get("#{uri.path}#{query_string}", {'Authorization' => "GoogleLogin auth=#{@session.auth_token}", 'GData-Version' => '3'})
+        Net::HTTP.start(uri.host, uri.port, Garb.proxy_address, Garb.proxy_port, :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
+          http.open_timeout = Garb.open_timeout
+          http.read_timeout = Garb.read_timeout
+
+          unless @session.access_token.nil?
+            http.get(relative_uri, {'Authorization' => "Bearer #{@session.access_token.token}"})
+          else
+            http.get(relative_uri, {
+              'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
+              'GData-Version' => '3'
+            })
+          end
         end
       end
 
       def oauth_user_request
-        @session.access_token.get("#{uri}#{query_string}", {'GData-Version' => '3'})
+        @session.access_token.get(absolute_uri, {'GData-Version' => '3'})
       end
     end
   end

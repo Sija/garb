@@ -46,6 +46,18 @@ module Garb
     attr_writer   :open_timeout, :read_timeout, :ca_cert_file
   end
 
+  def use_fibers=(val)
+    if val and (!defined?(EM) || !defined?(Fiber))
+      raise ArgumentError, 'Eventmachine and Fibers required (Ruby 1.9+ only)'
+    end
+    require 'em-net-http' if val
+    @use_fibers = val
+  end
+
+  def use_fibers
+    @use_fibers || false
+  end
+
   def open_timeout
     @open_timeout || 60
   end
