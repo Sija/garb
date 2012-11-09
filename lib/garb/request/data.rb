@@ -65,14 +65,12 @@ module Garb
       end
 
       def single_user_request_evented
-        req = nil
-        EM.run do
-          Fiber.new do
-            req = single_user_request
-            EM.stop_event_loop
-          end.resume
+        f = Fiber.current
+        fiber = Fiber.new do
+          f.resume single_user_request
         end
-        req
+        fiber.resume
+        Fiber.yield
       end
 
       def single_user_request
