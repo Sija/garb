@@ -14,7 +14,7 @@ module Garb
       end
 
       def entries
-        (parsed_response and parsed_response['items']) || []
+        parsed_response && parsed_response['items'] || []
       end
 
       def response

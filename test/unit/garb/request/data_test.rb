@@ -124,12 +124,12 @@ module Garb
             m.expects(:get).with('/data?key=value', {
               'Authorization' => 'GoogleLogin auth=toke',
               'GData-Version' => '3'
-            }).returns(response)
+            })
           end
 
-          Garb.proxy_address = "127.0.0.1"
-          Garb.proxy_port = "1234"
-          Net::HTTP.expects(:start).with('example.com', 443, "127.0.0.1", "1234", :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE).yields(http).returns(response)
+          Garb.proxy_address = '127.0.0.1'
+          Garb.proxy_port = '1234'
+          Net::HTTP.expects(:start).with('example.com', 443, '127.0.0.1', '1234', :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE).yields(http).returns(response)
 
           data_request = Request::Data.new(@session, 'https://example.com/data', 'key' => 'value')
           assert_equal response, data_request.single_user_request

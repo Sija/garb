@@ -1,3 +1,11 @@
+Version 0.9.7
+
+  * Fixed bug causing Garb::Model#all_results to return nil if no limit provided
+  * Don't error out if goal Destination is missing steps
+  * Fixed "undefined method `map' for nil:NilClass" [#7]
+  * Single user requests supports fibers with `Garb.use_fibers = true` [#6]
+  * Made Garb::ResultSet comparable
+
 Version 0.9.6
 
   * Swapped Yajl/JSON for MultiJson

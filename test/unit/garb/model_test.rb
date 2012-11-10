@@ -128,13 +128,12 @@ module Garb
           end
 
           should "be able to fetch multiple pages of results" do
-            @results.results = ['result'] * 3
             @results.total_results = 25
             results = @test_model.all_results(@profile)
-            assert_equal 27, results.size
+            assert_equal 30, results.size
           end
 
-          should "be able to fetch multiple pages of results passing :all symbol" do
+          should "be able to pass :all symbol to fetch multiple pages of results" do
             @results.results = ['result']
             @results.total_results = 25
             results = @test_model.results(@profile, :all => true)
