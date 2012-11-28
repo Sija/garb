@@ -30,7 +30,7 @@ Single User Login
 OAuth Access Token
 ------------------
 
-    > Garb::Session.access_token = access_token # assign from oauth gem
+    > Garb::Session.access_token = access_token # an instance of OAuth2::Client
 
 Accounts, WebProperties, Profiles, and Goals
 --------------------------------------------
