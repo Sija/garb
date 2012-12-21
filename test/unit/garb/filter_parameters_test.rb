@@ -2,23 +2,6 @@ require 'test_helper'
 
 module Garb
   class FilterParametersTest < MiniTest::Unit::TestCase
-    # def self.should_define_operators(*operators)
-    #   operators.each do |operator|
-    #     should "create an operator and add to parameters for the #{operator} method" do
-    #       new_operator = stub
-    #       symbol = :foo
-    #
-    #       SymbolOperator.expects(:new).with(:bar, operator).returns(new_operator)
-    #       @filter_parameters.filters do
-    #         send(operator.to_sym, :bar, 100)
-    #       end
-    #
-    #       parameter = {new_operator => 100}
-    #       assert_equal parameter, @filter_parameters.parameters.last
-    #     end
-    #   end
-    # end
-
     context "A FilterParameters" do
       context "when converting parameters hash into query string parameters" do
         should "parameterize hash operators and join elements with AND" do
