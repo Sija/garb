@@ -19,7 +19,6 @@ module Garb
       self.parameters = (Array.wrap(parameters) || []).compact
     end
 
-    [{}, [{}, {}]]
     def to_params
       value = array_to_params(self.parameters)
       value.empty? ? {} : {'filters' => value}
