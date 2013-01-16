@@ -26,7 +26,7 @@ module Garb
     end
     
     def [](*args)
-      return @results[*args] if args.first.is_a? Integer
+      return @results[*args] if args.size == 1 && args.first.is_a?(Integer)
       copy = self.dup
       copy.results = @results[*args]
       copy
