@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    garb (0.9.6)
+    garb (0.9.7)
       activesupport (>= 2.2)
       multi_json (>= 1.3)
 

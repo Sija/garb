@@ -50,7 +50,7 @@ module Garb
           setup do
             @response = stub(:body => "raw report data")
             Request::Data.stubs(:new).returns(stub(:send_request => @response))
-            @results = ResultSet.new(['result'] * 10)
+            @results = ResultSet.new(Array.new(10) { |i| 'result #%d' % i })
             ReportResponse.stubs(:new).returns(stub(:results => @results))
 
             @test_model.stubs(:metrics).returns(stub(:to_params => {'metrics' => 'ga:visits'}))
@@ -73,8 +73,14 @@ module Garb
             assert_data_params(@params)
           end
 
-          should "get subset of results" do
+          should "get subset of results using bracket notation" do
             assert_equal @results[0..2], @test_model.results(@profile)[0..2]
+            assert_received(ReportResponse, :new) {|e| e.with('raw report data', OpenStruct)}
+            assert_data_params(@params)
+          end
+
+          should "get one of the results using bracket notation" do
+            assert_equal @results[2], @test_model.results(@profile)[2]
             assert_received(ReportResponse, :new) {|e| e.with('raw report data', OpenStruct)}
             assert_data_params(@params)
           end
