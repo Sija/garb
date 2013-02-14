@@ -48,12 +48,13 @@ module Garb
     end
 
     def all_results(profile, options = {})
+      offset = options.delete(:offset)
       limit = options.delete(:limit)
       options[:limit] = 10_000 # maximum allowed
       results = nil
-      while ((rs = results(profile, options)) && !rs.empty?)
+      while ((rs = results(profile, options.merge(:offset => offset))) && !rs.empty?)
         results = results ? results + rs : rs
-        options[:offset] = results.size + 1
+        offset = results.size + 1
         
         break if limit and results.size >= limit
         break if results.size >= results.total_results
