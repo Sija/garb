@@ -47,6 +47,7 @@ module Garb
     end
 
     def all_results(profile, options = {})
+      options = options.dup
       limit = options.delete(:limit)
       options[:limit] = 10_000 # maximum allowed
       results = nil
@@ -54,7 +55,7 @@ module Garb
         results = results ? results + rs : rs
         options[:offset] = results.size + 1
         
-        break if limit and results.size >= limit
+        break if limit && results.size >= limit
         break if results.size >= results.total_results
       end
       limit && results ? results[0...limit] : results
