@@ -1,7 +1,6 @@
 module Garb
   module Model
     MONTH = 2592000
-    #URL = 'https://www.google.com/analytics/feeds/data'
     URL = 'https://www.googleapis.com/analytics/v3/data/ga'
 
     def self.extended(base)
@@ -30,8 +29,8 @@ module Garb
     def results(profile, options = {})
       return all_results(profile, options) if options.delete(:all)
 
-      start_date = options.fetch(:start_date, Time.now - MONTH)
-      end_date = options.fetch(:end_date, Time.now)
+      start_date = options[:start_date] || Time.now - MONTH
+      end_date = options[:end_date] || Time.now
       default_params = build_default_params(profile, start_date, end_date)
 
       param_set = [

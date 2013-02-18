@@ -134,8 +134,22 @@ module Garb
           data_request = Request::Data.new(@session, 'https://example.com/data', 'key' => 'value')
           assert_equal response, data_request.single_user_request
         end
-      end
 
+        should "merge :api_key into the parameters" do
+          @session.api_key = 'some_api_key'
+          
+          data_request = Request::Data.new(@session, 'https://example.com/data')
+          assert_equal data_request.parameters['key'], @session.api_key
+        end
+
+        should "merge :api_key into the parameters for default session" do
+          Garb::Session.api_key = 'some_api_key'
+          
+          data_request = Request::Data.new(Garb::Session, 'https://example.com/data')
+          assert_equal data_request.parameters['key'], Garb::Session.api_key
+        end
+      end
+      
     end
   end
 end
