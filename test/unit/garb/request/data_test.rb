@@ -116,12 +116,13 @@ module Garb
 
         should "be able to request via http with an auth token" do
           @session.expects(:auth_token).with().returns('toke')
-          response = mock
 
           http = mock do |m|
             m.expects(:open_timeout=).with(Garb.open_timeout)
             m.expects(:read_timeout=).with(Garb.read_timeout)
-            m.expects(:get).with('/data?key=value', {
+            m.expects(:use_ssl=).with(true)
+            m.expects(:verify_mode=).with(OpenSSL::SSL::VERIFY_NONE)
+            m.expects(:request_get).with('/data?key=value', {
               'Authorization' => 'GoogleLogin auth=toke',
               'GData-Version' => '3'
             })
@@ -129,10 +130,9 @@ module Garb
 
           Garb.proxy_address = '127.0.0.1'
           Garb.proxy_port = '1234'
-          Net::HTTP.expects(:start).with('example.com', 443, '127.0.0.1', '1234', :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE).yields(http).returns(response)
-
+          Net::HTTP.expects(:new).with('example.com', 443, '127.0.0.1', '1234').returns(http)
           data_request = Request::Data.new(@session, 'https://example.com/data', 'key' => 'value')
-          assert_equal response, data_request.single_user_request
+          data_request.single_user_request
         end
 
         should "merge :api_key into the parameters" do

@@ -74,18 +74,21 @@ module Garb
       end
 
       def single_user_request
-        Net::HTTP.start(uri.host, uri.port, Garb.proxy_address, Garb.proxy_port, :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
-          http.open_timeout = Garb.open_timeout
-          http.read_timeout = Garb.read_timeout
+        http = Net::HTTP.new(uri.host, uri.port, Garb.proxy_address, Garb.proxy_port)
+        http.open_timeout = Garb.open_timeout
+        http.read_timeout = Garb.read_timeout
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-          unless @session.access_token.nil?
-            http.get(relative_uri, {'Authorization' => "Bearer #{@session.access_token.token}"})
-          else
-            http.get(relative_uri, {
-              'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
-              'GData-Version' => '3'
-            })
-          end
+        unless @session.access_token.nil?
+          http.request_get(URI.encode(relative_uri), {
+            'Authorization' => "Bearer #{@session.access_token.token}"
+          })
+        else
+          http.request_get(URI.encode(relative_uri), {
+            'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
+            'GData-Version' => '3'
+          })
         end
       end
 
