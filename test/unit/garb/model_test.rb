@@ -105,7 +105,7 @@ module Garb
             segments = stub(:parameters => filter_parameters, :to_params => {'filters' => 'dynamic_segment_params'})
             FilterParameters.stubs(:new).returns(filters).then.returns(segments)
 
-            assert_equal ['result'], @test_model.results(@profile, :dynamic_segment => 'dynamic_segment_params')
+            assert_equal @results, @test_model.results(@profile, :dynamic_segment => 'dynamic_segment_params')
             assert_data_params(@params.merge({'segment' => 'dynamic::dynamic_segment_params'}))
           end
 
