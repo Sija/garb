@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Garb by Sija</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Garb</h1>
+        <p>A Ruby wrapper for the Google Analytics API</p>
+
+        <p class="view"><a href="https://github.com/Sija/garb">View the Project on GitHub <small>Sija/garb</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/Sija/garb/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Sija/garb/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Sija/garb">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Garb <a href="http://travis-ci.org/Sija/garb"><img src="https://secure.travis-ci.org/Sija/garb.png" alt="Build Status"></a>
+</h1>
+
+<p><a href="http://github.com/Sija/garb">http://github.com/Sija/garb</a></p>
+
+<h1>Important Changes</h1>
+
+<p>This fork contains heavily modified version of vigetlab's <code>Garb</code> library.<br>
+  It works only with version 3 of Google API.</p>
+
+<p>Please read CHANGELOG</p>
+
+<h2>Description</h2>
+
+<p>Provides a Ruby API to the Google Analytics API.</p>
+
+<p><a href="https://developers.google.com/analytics/devguides/reporting/core/v3/coreDevguide">https://developers.google.com/analytics/devguides/reporting/core/v3/coreDevguide</a></p>
+
+<h1>Basic Usage</h1>
+
+<h2>Single User Login</h2>
+
+<pre><code>&gt; Garb::Session.api_key = api_key # required for 2-step authentication
+&gt; Garb::Session.login(username, password)
+</code></pre>
+
+<h2>OAuth Access Token</h2>
+
+<pre><code>&gt; Garb::Session.access_token = access_token # an instance of OAuth2::Client
+</code></pre>
+
+<h2>Accounts, WebProperties, Profiles, and Goals</h2>
+
+<pre><code>&gt; Garb::Management::Account.all
+&gt; Garb::Management::WebProperty.all
+&gt; Garb::Management::Profile.all
+&gt; Garb::Management::Goal.all
+</code></pre>
+
+<h2>Profiles for a UA- Number (a WebProperty)</h2>
+
+<pre><code>&gt; profile = Garb::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
+</code></pre>
+
+<h2>Define a Report Class</h2>
+
+<pre><code>class Exits
+  extend Garb::Model
+
+  metrics :exits, :pageviews
+  dimensions :page_path
+end
+</code></pre>
+
+<h2>Get the Results</h2>
+
+<pre><code>&gt; Exits.results(profile, :filters =&gt; {:page_path.eql =&gt; '/'})
+</code></pre>
+
+<p>OR shorthand</p>
+
+<pre><code>&gt; profile.exits(:filters =&gt; {:page_path.eql =&gt; '/'})
+</code></pre>
+
+<p>Be forewarned, these numbers are for the last <strong>30</strong> days and may be slightly different from the numbers displayed in Google Analytics' dashboard for <strong>1 month</strong>.</p>
+
+<h2>Other Parameters</h2>
+
+<ul>
+<li>start_date: The date of the period you would like this report to start</li>
+<li>end_date: The date to end, inclusive</li>
+<li>limit: The maximum number of results to be returned</li>
+<li>offset: The starting index</li>
+<li>all: Return all results if true (which might result in several requests to GAPI)</li>
+</ul><h2>Metrics &amp; Dimensions</h2>
+
+<p><strong>Metrics and Dimensions are very complex because of the ways in which they can and cannot be combined.</strong></p>
+
+<p>I suggest reading the google documentation to familiarize yourself with this.</p>
+
+<p><a href="https://developers.google.com/analytics/devguides/reporting/core/dimsmets#q=bouncerate">https://developers.google.com/analytics/devguides/reporting/core/dimsmets#q=bouncerate</a></p>
+
+<p>When you've returned, you can pass the appropriate combinations to Garb, as symbols.</p>
+
+<h2>Filtering</h2>
+
+<p>Google Analytics supports a significant number of filtering options.</p>
+
+<p><a href="https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters">https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters</a></p>
+
+<p>Here is what we can do currently:
+  (the operator is a method on a symbol for the appropriate metric or dimension)</p>
+
+<p>Operators on metrics:</p>
+
+<pre><code>eql =&gt; '==',
+not_eql =&gt; '!=',
+gt =&gt; '&gt;',
+gte =&gt; '&gt;=',
+lt =&gt; '&lt;',
+lte =&gt; '&lt;='
+</code></pre>
+
+<p>Operators on dimensions:</p>
+
+<pre><code>matches =&gt; '==',
+does_not_match =&gt; '!=',
+contains =&gt; '=~',
+does_not_contain =&gt; '!~',
+substring =&gt; '=@',
+not_substring =&gt; '!@'
+</code></pre>
+
+<p>Given the previous Exits example report in shorthand, we can add an option for filter:</p>
+
+<pre><code>profile.exits(:filters =&gt; {:page_path.eql =&gt; '/extend/effectively-using-git-with-subversion/')
+</code></pre>
+
+<h2>SSL</h2>
+
+<p>Version 0.2.3 includes support for real ssl encryption for SINGLE USER authentication. First do:</p>
+
+<pre><code>Garb::Session.login(username, password, :secure =&gt; true)
+</code></pre>
+
+<p>Next, be sure to download <a href="http://curl.haxx.se/ca/cacert.pem">http://curl.haxx.se/ca/cacert.pem</a> into your application somewhere.
+  Then, point <code>Garb.ca_cert_file</code> property to that file.</p>
+
+<p>For whatever reason, simply creating a new certificate store and setting the defaults would
+  not validate the google ssl certificate as authentic.</p>
+
+<h2>OPEN / READ TIMEOUT</h2>
+
+<p>The open and read timeout values used with the network client (Net::HTTP) are configurable.
+  Both values default to 60 seconds.  </p>
+
+<pre><code>Garb.open_timeout = 3
+Garb.read_timeout = 3
+</code></pre>
+
+<h2>TODOS</h2>
+
+<ul>
+<li>rebuild AND/OR filtering in Garb::Model</li>
+</ul><h2>Requirements</h2>
+
+<ul>
+<li>active_support &gt;= 2.2</li>
+<li>multi_json &gt;= 1.3</li>
+</ul><h2>Requirements for Testing</h2>
+
+<ul>
+<li>shoulda</li>
+<li>mocha</li>
+<li>bourne</li>
+</ul><h2>Install</h2>
+
+<pre><code>From git:
+
+`git clone git://github.com/Sija/garb.git`
+`cd garb &amp;&amp; rake install`
+
+OR with bundler:
+
+gem 'garb', :git =&gt; 'git://github.com/Sija/garb.git'
+`bundle install`
+</code></pre>
+
+<h2>Contributors</h2>
+
+<p>Many Thanks, for all their help, goes to:</p>
+
+<ul>
+<li>Patrick Reagan</li>
+<li>Justin Marney</li>
+<li>Nick Plante</li>
+<li>James Cook</li>
+<li>Chris Gunther</li>
+</ul><h2>License</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2011 Viget Labs</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  'Software'), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/Sija">Sija</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
