@@ -3,14 +3,20 @@ Garb [![Build Status](https://secure.travis-ci.org/Sija/garb.png)](http://travis
 
   http://github.com/Sija/garb
 
-Important Changes
-=================
+Legato
+------
 
-  This fork contains heavily modified version of vigetlab's `Garb` library.
+  There's rewritten and (moar) actively maintained version of the library in the form of [Legato](https://github.com/tpitale/legato).  
+  You might want to check it out as it's mostly compatible with `Garb`.
+
+Important Changes
+-----------------
+
+  This fork contains heavily modified version of vigetlab's `Garb` library.  
   It works only with version 3 of Google API.
 
-  Please read CHANGELOG
-
+  Please read CHANGELOG.
+  
 Description
 -----------
 
@@ -187,7 +193,7 @@ License
 
   (The MIT License)
 
-  Copyright (c) 2011 Viget Labs
+  Copyright (c) 2011 Tony Pitale, Viget Labs
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
