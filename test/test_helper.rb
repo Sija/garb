@@ -1,5 +1,3 @@
-require 'json'
-
 begin
   require 'simplecov'
   SimpleCov.adapters.define 'garb' do
