@@ -79,7 +79,7 @@ module Garb
     def parse_segment(options)
       # dirty hack to support dynamic segments
       if options.has_key?(:segment_id)
-        segment = "gaid::#{options[:segment_id].to_i}"
+        segment = "gaid::#{options[:segment_id]}"
       elsif options.has_key?(:dynamic_segment)
         filters = FilterParameters.new(options[:dynamic_segment])
         segment = "dynamic::#{filters.to_params['filters']}"

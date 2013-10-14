@@ -98,6 +98,11 @@ module Garb
             assert_data_params(@params.merge({'segment' => 'gaid::1'}))
           end
 
+          should "be able to set the filter segment by alphanumeric id" do
+            assert_equal @results, @test_model.results(@profile, :segment_id => '1a')
+            assert_data_params(@params.merge({'segment' => 'gaid::1a'}))
+          end
+
           should "be able to filter with a dynamic segment" do
             # parse_filters called first...
             filter_parameters = stub(:<<)
