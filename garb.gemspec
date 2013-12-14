@@ -5,6 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Tony Pitale', 'Sijawusz Pur Rahnama']
   gem.email         = ['tony.pitale@viget.com', 'sija@sija.pl']
   gem.homepage      = 'http://github.com/Sija/garb'
+  gem.license       = 'MIT'
   
   gem.summary       = 'Google Analytics API Ruby Wrapper'
   gem.description   = ''

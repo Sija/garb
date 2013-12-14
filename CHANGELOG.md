@@ -1,3 +1,10 @@
+Version 0.9.8
+
+  * Switched to `Net::HTTP.new` as `Net::HTTP.start` doesn't honor timeout values (http://www.ruby-forum.com/topic/148968)
+  * Use @session.api_key for every data request, fixes #19
+  * Hack to add support for dynamic segments (props to @stevenwilkin)
+  * Tests are running green again
+
 Version 0.9.7
 
   * Fixed bug causing Garb::Model#all_results to return nil if no limit provided
