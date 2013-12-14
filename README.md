@@ -1,4 +1,4 @@
-Garb [![Build Status](https://secure.travis-ci.org/Sija/garb.png)](http://travis-ci.org/Sija/garb)
+Garb [![Gem Version](https://badge.fury.io/rb/garb.png)](http://badge.fury.io/rb/garb) [![Build Status](https://secure.travis-ci.org/Sija/garb.png)](http://travis-ci.org/Sija/garb)
 ====
 
   http://github.com/Sija/garb
