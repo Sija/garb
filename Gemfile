@@ -13,3 +13,7 @@ group :test do
   gem 'jferris-mocha',        :require => false
   gem 'json'
 end
+
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+end
