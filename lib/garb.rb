@@ -36,7 +36,7 @@ module Garb
     autoload :Authentication, 'garb/request/authentication'
     autoload :Data,           'garb/request/data'
   end
- end
+end
 
 module Garb
   extend self
