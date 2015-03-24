@@ -3,6 +3,11 @@ Garb [![Gem Version](https://badge.fury.io/rb/garb.png)](http://badge.fury.io/rb
 
   http://github.com/Sija/garb
 
+Google Shutting Down Deprecated Auth on April 20th, 2015
+--------------------------------------------------------
+
+On April 20th, Google will be shutting down ClientLogin, AuthSub, and OAuth 1.0. https://groups.google.com/forum/#!topic/google-analytics-api-notify/g8wbdUqEDd0
+
 Legato
 ------
 
