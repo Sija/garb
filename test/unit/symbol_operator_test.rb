@@ -14,24 +14,26 @@ class SymbolOperatorTest < MiniTest::Unit::TestCase
       assert_equal "-ga:metric", SymbolOperator.new(:metric, :desc).to_google_analytics
     end
 
-    # should "know if it is equal to another operator" do
-    #   op1 = SymbolOperator.new(:hello, "==")
-    #   op2 = SymbolOperator.new(:hello, "==")
-    #   assert_equal op1, op2
-    # end
-    #
-    # should "not be equal to another operator if target, operator, or prefix is different" do
-    #   op1 = SymbolOperator.new(:hello, "==")
-    #   op2 = SymbolOperator.new(:hello, "==", true)
-    #   refute_equal op1, op2
-    #
-    #   op1 = SymbolOperator.new(:hello1, "==")
-    #   op2 = SymbolOperator.new(:hello2, "==")
-    #   refute_equal op1, op2
-    #
-    #   op1 = SymbolOperator.new(:hello, "!=")
-    #   op2 = SymbolOperator.new(:hello, "==")
-    #   refute_equal op1, op2
-    # end
+    should 'know if it is equal to another instance' do
+      op1 = SymbolOperator.new(:hello, '==')
+      op2 = SymbolOperator.new(:hello, '==')
+      assert_equal op1, op2
+      assert op1.eql?(op2)
+      assert_equal op1.hash, op2.hash
+    end
+
+    should 'not be equal to another instance if different target or operator' do
+      op1 = SymbolOperator.new(:hello1, '==')
+      op2 = SymbolOperator.new(:hello2, '==')
+      refute_equal op1, op2
+      refute op1.eql?(op2)
+      refute_equal op1.hash, op2.hash
+
+      op1 = SymbolOperator.new(:hello, '!=')
+      op2 = SymbolOperator.new(:hello, '==')
+      refute_equal op1, op2
+      refute op1.eql?(op2)
+      refute_equal op1.hash, op2.hash
+    end
   end
 end
