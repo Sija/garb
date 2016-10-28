@@ -7,13 +7,13 @@ module SymbolOperatorMethods
     :lt      => '<',
     :lte     => '<=',
     :matches => '==',
-    
+
     :does_not_match   => '!=',
     :contains         => '=~',
     :does_not_contain => '!~',
     :substring        => '=@',
     :not_substring    => '!@',
-    
+
     :desc       => '-',
     :descending => '-'
   }
@@ -29,10 +29,21 @@ end
 
 class SymbolOperator
   include SymbolOperatorMethods
-  
+
+  attr_reader :field, :operator
+
   def initialize(field, operator)
     @field, @operator = field, operator
   end unless method_defined? :initialize
+
+  def ==(other)
+    field == other.field && operator == other.operator
+  end
+  alias eql? ==
+
+  def hash
+    [field, operator].hash
+  end
 end
 
 symbol_slugs = if Object.const_defined?('DataMapper')
