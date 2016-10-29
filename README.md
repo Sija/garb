@@ -34,46 +34,60 @@ Basic Usage
 
 Single User Login
 -----------------
-  
-    > Garb::Session.api_key = api_key # required for 2-step authentication
-    > Garb::Session.login(username, password)
+
+```ruby
+Garb::Session.api_key = api_key # required for 2-step authentication
+Garb::Session.login(username, password)
+```
     
 OAuth Access Token
 ------------------
 
-    > Garb::Session.access_token = access_token # an instance of OAuth2::Client
+```ruby
+Garb::Session.access_token = access_token # an instance of OAuth2::Client
+```
 
 Accounts, WebProperties, Profiles, and Goals
 --------------------------------------------
 
-    > Garb::Management::Account.all
-    > Garb::Management::WebProperty.all
-    > Garb::Management::Profile.all
-    > Garb::Management::Goal.all
+```ruby
+Garb::Management::Account.all
+Garb::Management::WebProperty.all
+Garb::Management::Profile.all
+Garb::Management::Goal.all
+```
 
 Profiles for a UA- Number (a WebProperty)
 -----------------------------------------
 
-    > profile = Garb::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
+```ruby
+profile = Garb::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
+```
 
 Define a Report Class
 ---------------------
 
-    class Exits
-      extend Garb::Model
+```ruby
+class Exits
+  extend Garb::Model
 
-      metrics :exits, :pageviews
-      dimensions :page_path
-    end
+  metrics :exits, :pageviews
+  dimensions :page_path
+end
+```
 
 Get the Results
 ---------------
 
-    > Exits.results(profile, :filters => {:page_path.eql => '/'})
+```ruby
+Exits.results(profile, :filters => {:page_path.eql => '/'})
+```
 
   OR shorthand
 
-    > profile.exits(:filters => {:page_path.eql => '/'})
+```ruby
+profile.exits(:filters => {:page_path.eql => '/'})
+```
 
   Be forewarned, these numbers are for the last **30** days and may be slightly different from the numbers displayed in Google Analytics' dashboard for **1 month**.
 
@@ -109,32 +123,40 @@ Filtering
 
   Operators on metrics:
 
-    eql => '==',
-    not_eql => '!=',
-    gt => '>',
-    gte => '>=',
-    lt => '<',
-    lte => '<='
+```ruby
+eql => '==',
+not_eql => '!=',
+gt => '>',
+gte => '>=',
+lt => '<',
+lte => '<='
+```
 
   Operators on dimensions:
 
-    matches => '==',
-    does_not_match => '!=',
-    contains => '=~',
-    does_not_contain => '!~',
-    substring => '=@',
-    not_substring => '!@'
+```ruby
+matches => '==',
+does_not_match => '!=',
+contains => '=~',
+does_not_contain => '!~',
+substring => '=@',
+not_substring => '!@'
+```
     
   Given the previous Exits example report in shorthand, we can add an option for filter:
 
-    profile.exits(:filters => {:page_path.eql => '/extend/effectively-using-git-with-subversion/')
+```ruby
+profile.exits(:filters => {:page_path.eql => '/extend/effectively-using-git-with-subversion/')
+```
 
 SSL
 ---
 
   Version 0.2.3 includes support for real ssl encryption for SINGLE USER authentication. First do:
 
-    Garb::Session.login(username, password, :secure => true)
+```ruby
+Garb::Session.login(username, password, :secure => true)
+```
 
   Next, be sure to download http://curl.haxx.se/ca/cacert.pem into your application somewhere.
   Then, point `Garb.ca_cert_file` property to that file.
@@ -148,8 +170,10 @@ OPEN / READ TIMEOUT
   The open and read timeout values used with the network client (Net::HTTP) are configurable.
   Both values default to 60 seconds.  
 
-    Garb.open_timeout = 3
-    Garb.read_timeout = 3
+```ruby
+Garb.open_timeout = 3
+Garb.read_timeout = 3
+```
     
 TODOS
 -----
@@ -174,11 +198,15 @@ Install
 
 Add this line to your application’s Gemfile:
 
-    gem 'garb'
+```ruby
+gem 'garb'
+```
 
 Then run:
 
-    bundle install
+```sh
+bundle install
+```
 
 Contributors
 ------------
