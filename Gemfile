@@ -14,6 +14,3 @@ group :test do
   gem 'json'
 end
 
-platforms :rbx do
-  gem 'rubysl', '~> 2.0'
-end
