@@ -2,7 +2,7 @@ module Garb
   class Destination
     attr_reader :match_type, :url, :steps, :case_sensitive
 
-    alias :case_sensitive? :case_sensitive
+    alias case_sensitive? case_sensitive
 
     def initialize(attributes)
       return unless attributes.is_a? Hash

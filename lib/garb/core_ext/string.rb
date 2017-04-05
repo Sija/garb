@@ -7,7 +7,7 @@ unless Object.const_defined?('ActiveSupport')
         when :lower then Garb::Inflector.camelize(self, false)
       end
     end
-    alias_method :camelcase, :camelize
+    alias camelcase camelize
 
     def underscore
       Garb::Inflector.underscore(self)

@@ -1,6 +1,6 @@
 #!/usr/bin/env rake
 
-require 'rubygems/package_task' 
+require 'rubygems/package_task'
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 
@@ -27,5 +27,3 @@ begin
 rescue LoadError
   nil
 end
-
-# EOF

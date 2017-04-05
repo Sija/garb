@@ -22,7 +22,7 @@ module Garb
             hash_key = (custom_key || key).to_s
             instance_variable_set var, @entry[hash_key]
           end
-        end #unless method_defined?(key)
+        end # unless method_defined?(key)
       end
 
       def map_values_for(hash)

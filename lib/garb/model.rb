@@ -54,13 +54,13 @@ module Garb
       while ((rs = results(profile, options)) && !rs.empty?)
         results = results ? results + rs : rs
         options[:offset] = results.size + 1
-        
+
         break if limit && results.size >= limit
         break if results.size >= results.total_results
       end
       limit && results ? results[0...limit] : results
     end
-    
+
     private
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
@@ -69,7 +69,7 @@ module Garb
     end
 
     def build_params(param_set)
-      param_set.inject({}) { |p,i| p.merge i }.reject { |k,v| v.nil? }
+      param_set.inject({}) { |p,i| p.merge i }.reject { |_,v| v.nil? }
     end
 
     def parse_filters(options)

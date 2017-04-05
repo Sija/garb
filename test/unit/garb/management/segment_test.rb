@@ -19,14 +19,6 @@ module Garb
 
       context "A Segment" do
         setup do
-          entry = {
-            "link" => [{"rel" => "self", "href" => Feed::BASE_URL+"/segments/12"}],
-            "dxp:segment" => {
-              "id" => "gaid::-3",
-              "name" => "Returning Visitor",
-              "dxp:definition" => "ga:visitorType==Returning Visitor"
-            }
-          }
           entry = MultiJson.load(read_fixture("ga_segment_management.json"))["items"].first
           @segment = Segment.new(entry, Session)
         end

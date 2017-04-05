@@ -7,7 +7,7 @@ module Garb
       attr_reader :session
       ga_attribute :name, :number, :value, :active
 
-      alias :active? :active
+      alias active? active
 
       def self.all(session = Session, path = '/accounts/~all/webproperties/~all/profiles/~all/goals')
         feed = Feed.new(session, path)

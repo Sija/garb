@@ -30,7 +30,7 @@ module Garb
 
       def send_request
         Garb.log "Garb::Request -> #{relative_uri}"
-        
+
         response = if @session.single_user?
           if Garb.use_fibers
             single_user_request_evented
@@ -40,7 +40,7 @@ module Garb
         elsif @session.oauth_user?
           oauth_user_request
         end
-        
+
         Garb.log "Garb::Response -> #{response.inspect}"
         handle_response response
       end

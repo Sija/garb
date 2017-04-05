@@ -10,7 +10,7 @@ require 'multi_json'
 
 module Garb
   autoload :VERSION,          'garb/version'
-  
+
   autoload :Attributes,       'garb/attributes'
   autoload :PathAttribute,    'garb/path_attribute'
   autoload :Destination,      'garb/destination'
@@ -80,12 +80,12 @@ module Garb
 
     "#{$1}ga:#{$2}" if "#{thing.to_s.camelize(:lower)}" =~ /^(-)?(.*)$/
   end
-  alias :to_ga :to_google_analytics
+  alias to_ga to_google_analytics
 
   def from_google_analytics(thing)
     thing.to_s.gsub(/^ga\:/, '').underscore
   end
-  alias :from_ga :from_google_analytics
+  alias from_ga from_google_analytics
 end
 
 require 'garb/support'

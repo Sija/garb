@@ -4,11 +4,11 @@ module Garb
   class AuthError < Error; end
   class ClientError < Error
     attr_reader :code, :message, :errors, :uri
-    
+
     def initialize(uri, message, code = nil, errors = [])
       @code, @message, @errors, @uri = code, message, errors, uri
     end
-    
+
     def to_s
       "#{code ? "[#{code}] #{message}" : message} : #{uri}"
     end

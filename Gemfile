@@ -13,4 +13,3 @@ group :test do
   gem 'jferris-mocha',        :require => false
   gem 'json'
 end
-
