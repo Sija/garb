@@ -89,7 +89,26 @@ module Garb
 
     def parse_sort(options)
       sort = ReportParameter.new(:sort)
-      sort << options[:sort] if options.has_key?(:sort)
+
+      if options.has_key?(:sort)
+        duplicated_operators = {
+          -1 => :desc,
+          '$gt' => :gt,
+          '$gte' => :gte,
+          '$lt' => :lt,
+          '$lte' => :lte
+        }
+        if Object.const_defined?('Origin') &&
+           options[:sort].is_a?(::Origin::Key) &&
+           duplicated_operators.include?(options[:sort].operator)
+          field = options[:sort].name.to_sym
+          operator = duplicated_operators[options[:sort].operator]
+          sort << SymbolOperator.new(field, operator)
+        else
+          sort << options[:sort]
+        end
+      end
+
       sort
     end
 
