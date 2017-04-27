@@ -130,6 +130,11 @@ module Garb
             assert_data_params(@params.merge({'samplingLevel' => 'faster'}))
           end
 
+          should "be able to specify sampling level as symbol" do
+            assert_equal @results, @test_model.results(@profile, :sampling_level => :faster)
+            assert_data_params(@params.merge({'samplingLevel' => 'faster'}))
+          end
+
           should "be able to limit" do
             assert_equal @results, @test_model.results(@profile, :limit => 20)
             assert_data_params(@params.merge({'max-results' => 20}))
