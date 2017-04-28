@@ -26,7 +26,8 @@ module Garb
         next unless k.is_a?(SymbolOperatorMethods)
 
         escaped_v = v.to_s.gsub(/([,;])/) { |c| '\\' + c }
-        "#{URI.encode(k.to_google_analytics, /[=<>]/)}#{CGI.escape(escaped_v)}"
+        escaped_k = k.to_google_analytics.gsub(/([<>=])/) { |c| CGI.escape(c) }
+        "#{escaped_k}#{CGI.escape(escaped_v)}"
       end.join('%3B') # Hash AND (no duplicate keys), escape char for ';' fixes oauth
     end
   end
