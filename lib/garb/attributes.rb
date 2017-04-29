@@ -12,6 +12,7 @@ module Garb
       end
 
       private
+
       def define_a_method_for(key, custom_key = nil)
         custom_key ||= key.to_s.camelize(:lower)
         define_method(key) do

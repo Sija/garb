@@ -1,29 +1,29 @@
 module SymbolOperatorMethods
   OPERATORS = {
-    :eql     => '==',
-    :not_eql => '!=',
-    :gt      => '>',
-    :gte     => '>=',
-    :lt      => '<',
-    :lte     => '<=',
-    :matches => '==',
+    eql:     '==',
+    not_eql: '!=',
+    gt:      '>',
+    gte:     '>=',
+    lt:      '<',
+    lte:     '<=',
+    matches: '==',
 
-    :does_not_match   => '!=',
-    :contains         => '=~',
-    :does_not_contain => '!~',
-    :substring        => '=@',
-    :not_substring    => '!@',
+    does_not_match:   '!=',
+    contains:         '=~',
+    does_not_contain: '!~',
+    substring:        '=@',
+    not_substring:    '!@',
 
-    :desc       => '-',
-    :descending => '-'
-  }
+    desc:       '-',
+    descending: '-'
+  }.freeze
   SLUGS = OPERATORS.keys.freeze
 
   def to_google_analytics
     t = Garb.to_google_analytics @field || @target
     o = OPERATORS[@operator]
 
-    [:desc, :descending].include?(@operator) ? "#{o}#{t}" : "#{t}#{o}"
+    %i[desc descending].include?(@operator) ? "#{o}#{t}" : "#{t}#{o}"
   end
 end
 

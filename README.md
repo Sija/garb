@@ -21,7 +21,7 @@ Important Changes
   It works only with version 3 of Google API.
 
   Please read CHANGELOG.
-  
+
 Description
 -----------
 
@@ -39,7 +39,7 @@ Single User Login
 Garb::Session.api_key = api_key # required for 2-step authentication
 Garb::Session.login(username, password)
 ```
-    
+
 OAuth Access Token
 ------------------
 
@@ -143,7 +143,7 @@ does_not_contain => '!~',
 substring => '=@',
 not_substring => '!@'
 ```
-    
+
   Given the previous Exits example report in shorthand, we can add an option for filter:
 
 ```ruby
@@ -175,7 +175,7 @@ OPEN / READ TIMEOUT
 Garb.open_timeout = 3
 Garb.read_timeout = 3
 ```
-    
+
 TODOS
 -----
 

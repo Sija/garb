@@ -3,8 +3,8 @@ unless Object.const_defined?('ActiveSupport')
   class String
     def camelize(first_letter = :upper)
       case first_letter
-        when :upper then Garb::Inflector.camelize(self, true)
-        when :lower then Garb::Inflector.camelize(self, false)
+      when :upper then Garb::Inflector.camelize(self, true)
+      when :lower then Garb::Inflector.camelize(self, false)
       end
     end
     alias camelcase camelize
@@ -33,9 +33,9 @@ unless Object.const_defined?('ActiveSupport')
       def underscore(camel_cased_word)
         word = camel_cased_word.to_s.dup
         word.gsub!(/::/, '/')
-        word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
-        word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-        word.tr!("-", "_")
+        word.gsub!(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+        word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
+        word.tr!('-', '_')
         word.downcase!
         word
       end

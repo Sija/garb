@@ -1,6 +1,5 @@
 module Garb
   class ReportParameter
-
     attr_reader :elements
 
     def initialize(name)
@@ -18,8 +17,8 @@ module Garb
     end
 
     def to_params
-      value = self.elements.map { |param| Garb.to_google_analytics(param) }.join(',')
-      value.empty? ? {} : {self.name => value}
+      value = elements.map { |param| Garb.to_google_analytics(param) }.join(',')
+      value.empty? ? {} : { name => value }
     end
   end
 end

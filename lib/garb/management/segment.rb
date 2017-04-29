@@ -5,7 +5,7 @@ module Garb
       include PathAttribute
 
       attr_reader :session
-      ga_attribute :name, :definition, :id => 'segmentId'
+      ga_attribute :name, :definition, id: 'segmentId'
 
       def self.all(session = Session)
         feed = Feed.new(session, '/segments')

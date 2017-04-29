@@ -7,7 +7,7 @@ require 'rake/testtask'
 $:.unshift File.expand_path('../lib', __FILE__)
 require 'garb'
 
-task :default => :test
+task default: :test
 
 Rake::TestTask.new do |t|
   t.libs << 'test'

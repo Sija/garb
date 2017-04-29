@@ -20,14 +20,14 @@ module Garb
     end
 
     def +(other)
-      copy = self.dup
+      copy = dup
       copy.results = @results + other.to_a
       copy
     end
 
     def [](*args)
       return @results[*args] if args.size == 1 && args.first.is_a?(Integer)
-      copy = self.dup
+      copy = dup
       copy.results = @results[*args]
       copy
     end

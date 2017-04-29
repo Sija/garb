@@ -73,7 +73,7 @@ Version 0.6.0
   * Includes the start of a basic library of pre-built reports (require 'garb/reports')
 
 Version 0.5.1
-  
+
   * Brings back hash filters and symbol operators after agreed upon SymbolOperator
 
 Version 0.5.0
@@ -82,7 +82,7 @@ Version 0.5.0
   * The method of passing a hash to filters no longer works, at all
 
 Version 0.4.0
-  
+
   * Changes the api for filters and sort making it consistent with metrics/dimensions
   * If you wish to clear the defaults defined on a class, you may use clear_(filters/sort/metrics/dimensions)
   * To make a custom class using Garb::Resource, you must now extend instead of include the module

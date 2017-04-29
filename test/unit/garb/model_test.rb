@@ -59,11 +59,11 @@ module Garb
             now = Time.now
             Time.stubs(:now).returns(now)
             @params = {
-              'ids'         => Garb.to_ga(@profile.id),
-              'start-date'  => (now - Model::MONTH).strftime('%Y-%m-%d'),
-              'end-date'    => now.strftime('%Y-%m-%d'),
-              'metrics'     => 'ga:visits',
-              'dimensions'  => 'ga:pagePath',
+              'ids'           => Garb.to_ga(@profile.id),
+              'start-date'    => (now - Model::MONTH).strftime('%Y-%m-%d'),
+              'end-date'      => now.strftime('%Y-%m-%d'),
+              'metrics'       => 'ga:visits',
+              'dimensions'    => 'ga:pagePath',
               'samplingLevel' => 'default'
             }
           end

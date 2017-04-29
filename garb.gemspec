@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ['tony.pitale@viget.com', 'sija@sija.pl']
   gem.homepage      = 'http://github.com/Sija/garb'
   gem.license       = 'MIT'
-  
+
   gem.summary       = 'Google Analytics API Ruby Wrapper'
   gem.description   = ''
 
@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.name          = 'garb'
   gem.require_paths = ['lib']
   gem.version       = Garb::VERSION
-  
+
   gem.add_dependency 'activesupport', '>= 2.2'
   gem.add_dependency 'multi_json', '>= 1.3'
 end

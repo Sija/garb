@@ -1,7 +1,7 @@
 module Garb
   module Model
-    MONTH = 2592000
-    URL = 'https://www.googleapis.com/analytics/v3/data/ga'
+    MONTH = (60 * 60 * 24 * 30).freeze
+    URL = 'https://www.googleapis.com/analytics/v3/data/ga'.freeze
 
     def self.extended(base)
       ProfileReports.add_report_method(base)
@@ -63,6 +63,7 @@ module Garb
     end
 
     private
+
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
       response = request.send_request
@@ -70,7 +71,7 @@ module Garb
     end
 
     def build_params(param_set)
-      param_set.inject({}) { |p,i| p.merge i }.reject { |_,v| v.nil? }
+      param_set.inject({}) { |p, i| p.merge i }.reject { |_, v| v.nil? }
     end
 
     def parse_filters(options)
@@ -79,23 +80,23 @@ module Garb
 
     def parse_segment(options)
       # dirty hack to support dynamic segments
-      if options.has_key?(:segment_id)
+      if options.key?(:segment_id)
         segment = "gaid::#{options[:segment_id]}"
-      elsif options.has_key?(:dynamic_segment)
+      elsif options.key?(:dynamic_segment)
         filters = FilterParameters.new(options[:dynamic_segment])
         segment = "dynamic::#{filters.to_params['filters']}"
       end
-      {'segment' => segment}
+      { 'segment' => segment }
     end
 
     def parse_sort(options)
       sort = ReportParameter.new(:sort)
-      sort << options[:sort] if options.has_key?(:sort)
+      sort << options[:sort] if options.key?(:sort)
       sort
     end
 
     def parse_sampling_level(options)
-      { 'samplingLevel' => options.has_key?(:sampling_level) ? options[:sampling_level].to_s : 'default' }
+      { 'samplingLevel' => (options[:sampling_level] || :default).to_s }
     end
 
     def build_default_params(profile, start_date, end_date)
@@ -108,8 +109,8 @@ module Garb
 
     def build_page_params(options)
       params = {}
-      params['max-results'] = options[:limit] if options.has_key? :limit
-      params['start-index'] = options[:offset] if options.has_key? :offset
+      params['max-results'] = options[:limit] if options.key? :limit
+      params['start-index'] = options[:offset] if options.key? :offset
       params
     end
 

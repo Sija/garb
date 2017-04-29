@@ -47,7 +47,7 @@ module Garb
   end
 
   def use_fibers=(val)
-    if val and (!defined?(EM) || !defined?(Fiber))
+    if val && (!defined?(EM) || !defined?(Fiber))
       raise ArgumentError, 'Eventmachine and Fibers required (Ruby 1.9+ only)'
     end
     require 'em-net-http' if val
@@ -78,7 +78,7 @@ module Garb
   def to_google_analytics(thing)
     return thing.to_google_analytics if thing.respond_to? :to_google_analytics
 
-    "#{$1}ga:#{$2}" if "#{thing.to_s.camelize(:lower)}" =~ /^(-)?(.*)$/
+    "#{$1}ga:#{$2}" if thing.to_s.camelize(:lower) =~ /^(-)?(.*)$/
   end
   alias to_ga to_google_analytics
 

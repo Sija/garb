@@ -48,7 +48,7 @@ module Garb
       def handle_response(response)
         unless response.kind_of?(Net::HTTPSuccess) || (response.respond_to?(:status) && response.status == 200)
           body, parsed = response.body, MultiJson.load(response.body) rescue nil
-          if parsed and error = parsed['error']
+          if parsed && (error = parsed['error'])
             klass = case error['code']
               when 400 then BadRequestError
               when 401 then InvalidCredentialsError
@@ -80,18 +80,21 @@ module Garb
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-        unless @session.access_token.nil?
-          http.request_get(relative_uri, {'Authorization' => "Bearer #{@session.access_token.token}"})
-        else
-          http.request_get(relative_uri, {
+        options = if @session.access_token.nil?
+          {
             'Authorization' => "GoogleLogin auth=#{@session.auth_token}",
             'GData-Version' => '3'
-          })
+          }
+        else
+          {
+            'Authorization' => "Bearer #{@session.access_token.token}"
+          }
         end
+        http.request_get(relative_uri, options)
       end
 
       def oauth_user_request
-        @session.access_token.get(absolute_uri, {'GData-Version' => '3'})
+        @session.access_token.get(absolute_uri, { 'GData-Version' => '3' })
       end
     end
   end

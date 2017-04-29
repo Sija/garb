@@ -1,6 +1,5 @@
 module Garb
   class ReportResponse
-
     def initialize(response_body, instance_klass = OpenStruct)
       @response_body = response_body
       @instance_klass = instance_klass
@@ -24,6 +23,7 @@ module Garb
     end
 
     private
+
     def keys
       @keys ||= column_headers.map { |header| Garb.from_ga header['name'] }
     end

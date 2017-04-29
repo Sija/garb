@@ -2,6 +2,7 @@ module Garb
   class Error < StandardError; end
   class MissingCertFileError < Error; end
   class AuthError < Error; end
+
   class ClientError < Error
     attr_reader :code, :message, :errors, :uri
 
@@ -13,6 +14,7 @@ module Garb
       "#{code ? "[#{code}] #{message}" : message} : #{uri}"
     end
   end
+
   class BadRequestError < ClientError; end
   class InvalidCredentialsError < ClientError; end
   class InsufficientPermissionsError < ClientError; end

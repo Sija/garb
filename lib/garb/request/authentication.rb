@@ -1,7 +1,7 @@
 module Garb
   module Request
     class Authentication
-      URL = 'https://www.google.com/accounts/ClientLogin'
+      URL = 'https://www.google.com/accounts/ClientLogin'.freeze
 
       def initialize(email, password, opts = {})
         @email = email
