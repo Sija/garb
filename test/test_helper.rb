@@ -1,6 +1,6 @@
 begin
   require 'simplecov'
-  SimpleCov.adapters.define 'garb' do
+  SimpleCov.profiles.define 'garb' do
     add_filter '/test/'
     add_filter '/config/'
     add_filter 'version'
