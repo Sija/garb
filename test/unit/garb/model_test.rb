@@ -63,7 +63,8 @@ module Garb
               'start-date'  => (now - Model::MONTH).strftime('%Y-%m-%d'),
               'end-date'    => now.strftime('%Y-%m-%d'),
               'metrics'     => 'ga:visits',
-              'dimensions'  => 'ga:pagePath'
+              'dimensions'  => 'ga:pagePath',
+              'samplingLevel' => 'default'
             }
           end
 
@@ -122,6 +123,16 @@ module Garb
             assert_equal @results, @test_model.results(@profile, :sort => [:visits])
             assert_received(sort_parameter, :<<) {|e| e.with([:visits])}
             assert_data_params(@params.merge({'sort' => 'sort value'}))
+          end
+
+          should "be able to specify sampling level" do
+            assert_equal @results, @test_model.results(@profile, :sampling_level => 'faster')
+            assert_data_params(@params.merge({'samplingLevel' => 'faster'}))
+          end
+
+          should "be able to specify sampling level as symbol" do
+            assert_equal @results, @test_model.results(@profile, :sampling_level => :faster)
+            assert_data_params(@params.merge({'samplingLevel' => 'faster'}))
           end
 
           should "be able to limit" do

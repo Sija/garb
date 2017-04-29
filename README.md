@@ -99,6 +99,7 @@ Other Parameters
   * limit: The maximum number of results to be returned
   * offset: The starting index
   * all: Return all results if true (which might result in several requests to GAPI)
+  * sampling_level: Specify precision vs speed strategy ('default', 'faster', 'greater_precision')
 
 Metrics & Dimensions
 --------------------

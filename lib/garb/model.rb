@@ -40,6 +40,7 @@ module Garb
         parse_filters(options).to_params,
         parse_segment(options),
         parse_sort(options).to_params,
+        parse_sampling_level(options),
         build_page_params(options)
       ]
       data = send_request_for_data(profile, build_params(param_set))
@@ -91,6 +92,10 @@ module Garb
       sort = ReportParameter.new(:sort)
       sort << options[:sort] if options.has_key?(:sort)
       sort
+    end
+
+    def parse_sampling_level(options)
+      { 'samplingLevel' => options.has_key?(:sampling_level) ? options[:sampling_level].to_s : 'default' }
     end
 
     def build_default_params(profile, start_date, end_date)
