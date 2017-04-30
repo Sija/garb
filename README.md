@@ -61,7 +61,7 @@ Profiles for a UA- Number (a WebProperty)
 -----------------------------------------
 
 ```ruby
-profile = Garb::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
+profile = Garb::Management::Profile.all.detect { |p| p.web_property_id == 'UA-XXXXXXX-X' }
 ```
 
 Define a Report Class
@@ -80,13 +80,13 @@ Get the Results
 ---------------
 
 ```ruby
-Exits.results(profile, :filters => {:page_path.eql => '/'})
+Exits.results(profile, filters: { :page_path.eql => '/' })
 ```
 
   OR shorthand
 
 ```ruby
-profile.exits(:filters => {:page_path.eql => '/'})
+profile.exits(filters: { :page_path.eql => '/' })
 ```
 
   Be forewarned, these numbers are for the last **30** days and may be slightly different from the numbers displayed in Google Analytics' dashboard for **1 month**.
@@ -94,12 +94,12 @@ profile.exits(:filters => {:page_path.eql => '/'})
 Other Parameters
 ----------------
 
-  * start_date: The date of the period you would like this report to start
-  * end_date: The date to end, inclusive
-  * limit: The maximum number of results to be returned
-  * offset: The starting index
-  * all: Return all results if true (which might result in several requests to GAPI)
-  * sampling_level: Specify precision vs speed strategy ('default', 'faster', 'greater_precision')
+  * __start_date__: The date of the period you would like this report to start
+  * __end_date__: The date to end, inclusive
+  * __limit__: The maximum number of results to be returned
+  * __offset__: The starting index
+  * __all__: Return all results if true (which might result in several requests to GAPI)
+  * __sampling_level__: Specify precision vs speed strategy (`default`, `faster`, `greater_precision`)
 
 Metrics & Dimensions
 --------------------
@@ -125,29 +125,29 @@ Filtering
   Operators on metrics:
 
 ```ruby
-eql => '==',
-not_eql => '!=',
-gt => '>',
-gte => '>=',
-lt => '<',
-lte => '<='
+:eql      => '==',
+:not_eql  => '!=',
+:gt       => '>',
+:gte      => '>=',
+:lt       => '<',
+:lte      => '<='
 ```
 
   Operators on dimensions:
 
 ```ruby
-matches => '==',
-does_not_match => '!=',
-contains => '=~',
-does_not_contain => '!~',
-substring => '=@',
-not_substring => '!@'
+:matches          => '==',
+:does_not_match   => '!=',
+:contains         => '=~',
+:does_not_contain => '!~',
+:substring        => '=@',
+:not_substring    => '!@'
 ```
 
   Given the previous Exits example report in shorthand, we can add an option for filter:
 
 ```ruby
-profile.exits(:filters => {:page_path.eql => '/extend/effectively-using-git-with-subversion/')
+profile.exits(filters: { :page_path.eql => '/extend/effectively-using-git-with-subversion/' })
 ```
 
 SSL
@@ -156,7 +156,7 @@ SSL
   Version 0.2.3 includes support for real ssl encryption for SINGLE USER authentication. First do:
 
 ```ruby
-Garb::Session.login(username, password, :secure => true)
+Garb::Session.login(username, password, secure: true)
 ```
 
   Next, be sure to download http://curl.haxx.se/ca/cacert.pem into your application somewhere.
