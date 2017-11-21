@@ -16,6 +16,7 @@ module Garb
     end
 
     def <=>(other)
+      return nil unless other.is_a?(Garb::ResultSet)
       results <=> other.results
     end
 
