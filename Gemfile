@@ -8,6 +8,7 @@ gem 'rake'
 group :test do
   gem 'shoulda'
   gem 'shoulda-context'
+  gem 'shoulda-matchers', '~> 2.8'
   gem 'simplecov', '~> 0.14', require: false
   gem 'minitest', '4.2',      require: false
   gem 'jferris-mocha',        require: false
