@@ -1,4 +1,5 @@
 Garb [![Gem Version](https://badge.fury.io/rb/garb.png)](http://badge.fury.io/rb/garb) [![Build Status](https://secure.travis-ci.org/Sija/garb.png)](http://travis-ci.org/Sija/garb)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSija%2Fgarb.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSija%2Fgarb?ref=badge_shield)
 ====
 
   http://github.com/Sija/garb
@@ -246,3 +247,6 @@ License
   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSija%2Fgarb.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSija%2Fgarb?ref=badge_large)
