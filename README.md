@@ -1,7 +1,7 @@
-Garb [![Gem Version](https://badge.fury.io/rb/garb.svg)](https://badge.fury.io/rb/garb) [![Build Status](https://api.travis-ci.org/Sija/garb.svg?branch=master)](http://travis-ci.org/Sija/garb)
+Garb [![Gem Version](https://badge.fury.io/rb/garb.svg)](https://badge.fury.io/rb/garb) [![Build Status](https://api.travis-ci.org/Sija/garb.svg?branch=master)](https://travis-ci.org/Sija/garb)
 ====
 
-  http://github.com/Sija/garb
+  https://github.com/Sija/garb
 
 Google Shutting Down Deprecated Auth on April 20th, 2015
 --------------------------------------------------------
@@ -11,13 +11,13 @@ On April 20th, Google will be shutting down ClientLogin, AuthSub, and OAuth 1.0.
 Legato
 ------
 
-  There's rewritten and (moar) actively maintained version of the library in the form of [Legato](https://github.com/tpitale/legato).  
+  There's rewritten and (moar) actively maintained version of the library in the form of [Legato](https://github.com/tpitale/legato).
   You might want to check it out as it's mostly compatible with `Garb`.
 
 Important Changes
 -----------------
 
-  This fork contains heavily modified version of vigetlab's `Garb` library.  
+  This fork contains heavily modified version of vigetlab's `Garb` library.
   It works only with version 3 of Google API.
 
   Please read CHANGELOG.
@@ -159,7 +159,7 @@ SSL
 Garb::Session.login(username, password, secure: true)
 ```
 
-  Next, be sure to download http://curl.haxx.se/ca/cacert.pem into your application somewhere.
+  Next, be sure to download https://curl.haxx.se/ca/cacert.pem into your application somewhere.
   Then, point `Garb.ca_cert_file` property to that file.
 
   For whatever reason, simply creating a new certificate store and setting the defaults would
@@ -169,7 +169,7 @@ OPEN / READ TIMEOUT
 -------------------
 
   The open and read timeout values used with the network client (Net::HTTP) are configurable.
-  Both values default to 60 seconds.  
+  Both values default to 60 seconds.
 
 ```ruby
 Garb.open_timeout = 3
