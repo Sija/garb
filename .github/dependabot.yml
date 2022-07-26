@@ -1,12 +1,17 @@
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "07:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: minitest
-    versions:
-    - "> 4.2"
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+
+  # Maintain dependencies for Bunder
+  - package-ecosystem: bundler
+    directory: /
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: minitest
+        versions: ["> 4.2"]
