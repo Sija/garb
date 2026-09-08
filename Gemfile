@@ -9,7 +9,7 @@ group :test do
   gem 'shoulda'
   gem 'shoulda-context'
   gem 'shoulda-matchers', '~> 2.8'
-  gem 'simplecov', '~> 0.14', require: false
+  gem 'simplecov', '~> 1.2', require: false
   gem 'minitest', '4.2',      require: false
   gem 'jferris-mocha',        require: false
   gem 'json', '>= 1.8.5'
