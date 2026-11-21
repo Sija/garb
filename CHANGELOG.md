@@ -2,6 +2,7 @@ Next
 
   * Replaced deprecated `MultiJson` with stdlib `JSON` and dropped the `multi_json` dependency
   * Added `ostruct` as a runtime dependency (no longer a default gem starting with Ruby 3.5)
+  * Fixed "method redefined" warning when the same report method is added more than once
   * [#75](https://github.com/Sija/garb/pull/75): Fixed `Garb::Model#all_results` (`:all => true`) ignoring `:offset` after the first page - [@dblock](https://github.com/dblock)
 
 Version 0.9.8
