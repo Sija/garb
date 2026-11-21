@@ -2,6 +2,7 @@ module Garb
   module Model
     MONTH = (60 * 60 * 24 * 30).freeze
     URL = 'https://www.googleapis.com/analytics/v3/data/ga'.freeze
+    MAX_RESULTS = 10_000 # maximum allowed per request
 
     def self.extended(base)
       ProfileReports.add_report_method(base)
@@ -54,7 +55,7 @@ module Garb
       raise ArgumentError, ':offset must be greater than or equal to 1' if offset < 1
       options[:offset] = offset if options[:offset]
 
-      options[:limit] = 10_000 # maximum allowed
+      options[:limit] = page_size(limit, 0)
       results = nil
       while ((rs = results(profile, options)) && !rs.empty?)
         results = results ? results + rs : rs
@@ -63,12 +64,18 @@ module Garb
 
         break if limit && results.size >= limit
         break if next_offset > results.total_results
+
+        options[:limit] = page_size(limit, results.size)
       end
       results ||= rs # empty result set when nothing was fetched
       limit ? results[0...limit] : results
     end
 
     private
+
+    def page_size(limit, fetched)
+      limit ? [limit - fetched, MAX_RESULTS].min : MAX_RESULTS
+    end
 
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
