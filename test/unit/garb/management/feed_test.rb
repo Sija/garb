@@ -15,7 +15,7 @@ module Garb
           @feed.stubs(:response).returns(stub(:body => 'response body'))
           @feed.parsed_response
 
-          assert_received(JSON, :parse) {|e| e.with('response body')}
+          assert_received(JSON, :parse) { |e| e.with('response body') }
         end
 
         should "have entries from the parsed response" do
