@@ -1,5 +1,6 @@
 Next
 
+  * Replaced deprecated `MultiJson` with stdlib `JSON` and dropped the `multi_json` dependency
   * [#75](https://github.com/Sija/garb/pull/75): Fixed `Garb::Model#all_results` (`:all => true`) ignoring `:offset` after the first page - [@dblock](https://github.com/dblock)
 
 Version 0.9.8
