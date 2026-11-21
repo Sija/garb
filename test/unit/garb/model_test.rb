@@ -179,29 +179,47 @@ module Garb
             assert_equal results.size, 1
           end
 
-          should 'fetch multiple pages of results from an offset' do
-            rows = (11..25).map { |i| "result ##{i}" }
+          context 'when fetching all pages from an offset' do
+            setup do
+              @rows = (11..25).map { |i| "result ##{i}" }
+              pages = [@rows[0...10], @rows[10..-1]].map do |page|
+                result_set = ResultSet.new(page)
+                result_set.total_results = 25
+                stub(results: result_set)
+              end
+              ReportResponse.stubs(:new).returns(*pages)
+
+              @start_indexes = []
+              Request::Data.stubs(:new).with do |_session, _url, params|
+                @start_indexes << params['start-index']
+                true
+              end.returns(stub(send_request: @response))
+            end
+
+            should 'continue paging from the given offset' do
+              results = @test_model.results(@profile, all: true, offset: 11)
+              assert_equal @rows, results.to_a
+              assert_equal [11, 21], @start_indexes
+            end
+
+            should 'apply the limit to rows after the offset' do
+              results = @test_model.results(@profile, all: true, offset: 11, limit: 12)
+              assert_equal @rows[0...12], results.to_a
+              assert_equal [11, 21], @start_indexes
+            end
+          end
+
+          should 'fetch all pages from the start with a nil offset' do
+            rows = (1..15).map { |i| "result ##{i}" }
             pages = [rows[0...10], rows[10..-1]].map do |page|
               result_set = ResultSet.new(page)
-              result_set.total_results = 25
+              result_set.total_results = 15
               stub(results: result_set)
             end
             ReportResponse.stubs(:new).returns(*pages)
 
-            results = @test_model.results(@profile, all: true, offset: 11)
-            assert_equal rows, results.to_a
-            [11, 21].each do |start_index|
-              assert_data_params(
-                @params.merge('max-results' => 10_000,
-                              'start-index' => start_index)
-              )
-            end
-          end
-
-          should 'fetch multiple pages of results with a nil offset' do
-            @results.total_results = 25
             results = @test_model.results(@profile, all: true, offset: nil)
-            assert_equal 30, results.size
+            assert_equal rows, results.to_a
             assert_data_params(@params.merge('max-results' => 10_000))
             assert_data_params(
               @params.merge('max-results' => 10_000, 'start-index' => 11)
