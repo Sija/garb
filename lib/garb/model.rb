@@ -50,6 +50,8 @@ module Garb
     def all_results(profile, options = {})
       options = options.dup
       limit = options.delete(:limit)
+      limit &&= Integer(limit)
+      raise ArgumentError, ':limit must be greater than or equal to 1' if limit && limit < 1
       offset = Integer(options[:offset] || 1) # start-index is 1-based
       raise ArgumentError, ':offset must be greater than or equal to 1' if offset < 1
       options[:offset] = offset if options[:offset]

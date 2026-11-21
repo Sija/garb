@@ -179,6 +179,18 @@ module Garb
             assert_equal results.size, 1
           end
 
+          should 'accept a limit given as a string when fetching all pages' do
+            @results.total_results = 25
+            results = @test_model.all_results(@profile, limit: '5')
+            assert_equal 5, results.size
+          end
+
+          should 'reject a limit lower than 1 when fetching all pages' do
+            assert_raises(ArgumentError) do
+              @test_model.all_results(@profile, limit: 0)
+            end
+          end
+
           context 'when fetching all pages from an offset' do
             setup do
               @rows = (11..25).map { |i| "result ##{i}" }
