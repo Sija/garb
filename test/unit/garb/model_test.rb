@@ -209,8 +209,10 @@ module Garb
               ReportResponse.stubs(:new).returns(*pages)
 
               @start_indexes = []
+              @max_results = []
               Request::Data.stubs(:new).with do |_session, _url, params|
                 @start_indexes << params['start-index']
+                @max_results << params['max-results']
                 true
               end.returns(stub(send_request: @response))
             end
@@ -231,6 +233,7 @@ module Garb
               results = @test_model.results(@profile, all: true, offset: 11, limit: 12)
               assert_equal @rows[0...12], results.to_a
               assert_equal [11, 21], @start_indexes
+              assert_equal [12, 2], @max_results
             end
           end
 
