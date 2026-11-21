@@ -1,5 +1,10 @@
 Next
 
+  * Deprecated: Universal Analytics APIs (Core Reporting v3, Management v3) and ClientLogin used by `Garb` have been shut down by Google; README now points to GA4 replacement gems
+  * Replaced deprecated `MultiJson` with stdlib `JSON` and dropped the `multi_json` dependency
+  * Added `ostruct` as a runtime dependency (no longer a default gem starting with Ruby 3.5)
+  * Declared `required_ruby_version` as `>= 3.2`, matching the CI matrix
+  * Fixed "method redefined" warning when the same report method is added more than once
   * [#75](https://github.com/Sija/garb/pull/75): Fixed `Garb::Model#all_results` (`:all => true`) ignoring `:offset` after the first page - [@dblock](https://github.com/dblock)
 
 Version 0.9.8
