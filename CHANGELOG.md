@@ -22,6 +22,8 @@ Version 0.9.9
   * [#79](https://github.com/Sija/garb/pull/79): `Garb::Model#all_results` requests only as many rows as needed for `:limit` (extracted `Garb::Model::MAX_RESULTS`)
   * [#80](https://github.com/Sija/garb/pull/80): Fixed `Garb::Model#all_results` raising `ArgumentError` when the response has no `totalResults`
   * [#81](https://github.com/Sija/garb/pull/81): Combined `ResultSet`s are marked as sampled if any of them was sampled
+  * [#48](https://github.com/Sija/garb/pull/48): Fixed `NoMethodError` when comparing a `ResultSet` to other objects - [@jdelStrother](https://github.com/jdelStrother)
+  * [#46](https://github.com/Sija/garb/pull/46): Use `CGI.escape` instead of `URI.encode`, which was removed in Ruby 3.0 - [@ballcheck](https://github.com/ballcheck)
   * [#82](https://github.com/Sija/garb/pull/82): Fixed "method redefined" warning when the same report method is added more than once
   * [#37](https://github.com/Sija/garb/pull/37): Fixed "mismatched indentations" warning - [@amatsuda](https://github.com/amatsuda)
 
@@ -35,7 +37,7 @@ Version 0.9.8
 
   * Switched to `Net::HTTP.new` as `Net::HTTP.start` doesn't honor timeout values (http://www.ruby-forum.com/topic/148968)
   * Use `Session#api_key` for every data request (#19)
-  * Hack to add support for dynamic segments (props to @stevenwilkin)
+  * Hack to add support for dynamic segments - [@stevenwilkin](https://github.com/stevenwilkin)
   * Allow alphanumeric segment ids - [@bensaunders](https://github.com/bensaunders)
   * Tests are running green again
 
