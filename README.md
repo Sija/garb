@@ -3,16 +3,32 @@ Garb [![Gem Version](https://badge.fury.io/rb/garb.svg)](https://badge.fury.io/r
 
   https://github.com/Sija/garb
 
-Google Shutting Down Deprecated Auth on April 20th, 2015
---------------------------------------------------------
+Deprecation Notice
+------------------
 
-On April 20th, Google will be shutting down ClientLogin, AuthSub, and OAuth 1.0. https://groups.google.com/forum/#!topic/google-analytics-api-notify/g8wbdUqEDd0
+**This gem is no longer functional against Google's live services and is kept for historical purposes only.**
 
-Legato
-------
+  * `Garb` targets the Google Analytics **Core Reporting API v3** and **Management API v3** (Universal Analytics). Google stopped processing Universal Analytics data in July 2023 (July 2024 for Analytics 360) and has since shut both APIs down. See https://support.google.com/analytics/answer/11583528
+  * Username/password authentication (`Garb::Session.login`) relies on **ClientLogin**, which Google shut down on April 20th, 2015. See https://developers.google.com/identity/protocols/AuthForInstalledApps
+  * Google Analytics 4 (GA4) uses a different API with a different data model (e.g. `sessions`/`screenPageViews` instead of `ga:visits`/`ga:pageviews`, properties instead of profiles), so `Garb` cannot be pointed at it.
 
-  There's rewritten and (moar) actively maintained version of the library in the form of [Legato](https://github.com/tpitale/legato).
-  You might want to check it out as it's mostly compatible with `Garb`.
+Replacements
+------------
+
+Use one of these actively maintained, Google-published gems instead:
+
+  | Gem | Replaces | Notes |
+  | --- | --- | --- |
+  | [`google-analytics-data`](https://rubygems.org/gems/google-analytics-data) | Reporting (`Garb::Model`, `results`) | Official GA4 Data API client (gRPC-based, recommended) |
+  | [`google-analytics-admin`](https://rubygems.org/gems/google-analytics-admin) | `Garb::Management::*` | Official GA4 Admin API client (accounts, properties, data streams, key events) |
+  | [`google-apis-analyticsdata_v1beta`](https://rubygems.org/gems/google-apis-analyticsdata_v1beta) | Reporting | REST-based GA4 Data API client, lighter alternative to the gRPC one |
+  | [`google-apis-analyticsadmin_v1beta`](https://rubygems.org/gems/google-apis-analyticsadmin_v1beta) | `Garb::Management::*` | REST-based GA4 Admin API client |
+
+Authentication for all of the above is handled by [`googleauth`](https://rubygems.org/gems/googleauth) (service accounts, OAuth 2.0, Application Default Credentials).
+
+[Legato](https://github.com/tpitale/legato), previously recommended here as a successor, also targets the retired Universal Analytics API and is no longer an option.
+
+Migration guide: https://developers.google.com/analytics/devguides/migration/api/reporting-ua-to-ga4
 
 Important Changes
 -----------------
@@ -35,6 +51,8 @@ Basic Usage
 Single User Login
 -----------------
 
+  **Defunct:** ClientLogin was shut down by Google in April 2015; this method no longer works.
+
 ```ruby
 Garb::Session.api_key = api_key # required for 2-step authentication
 Garb::Session.login(username, password)
@@ -42,6 +60,8 @@ Garb::Session.login(username, password)
 
 OAuth Access Token
 ------------------
+
+  The only authentication method that was still supported until the Universal Analytics APIs were retired.
 
 ```ruby
 Garb::Session.access_token = access_token # an instance of OAuth2::Client
@@ -153,6 +173,8 @@ profile.exits(filters: { :page_path.eql => '/extend/effectively-using-git-with-s
 SSL
 ---
 
+  **Defunct:** this only applies to single user (ClientLogin) authentication, see above.
+
   Version 0.2.3 includes support for real ssl encryption for SINGLE USER authentication. First do:
 
 ```ruby
@@ -184,15 +206,19 @@ TODOS
 Requirements
 ------------
 
-  * active_support >= 2.2
-  * multi_json >= 1.3
+  * Ruby (tested on 3.2, 3.3 and 3.4)
+  * activesupport >= 2.2
+  * ostruct
 
-Requirements for Testing
-------------------------
+Running Tests
+-------------
 
-  * shoulda
-  * mocha
-  * bourne
+  The test suite stubs all network calls, so no Google credentials or API keys are needed:
+
+```sh
+bundle install
+bundle exec rake
+```
 
 Install
 -------

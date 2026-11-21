@@ -1,5 +1,6 @@
 Next
 
+  * Deprecated: Universal Analytics APIs (Core Reporting v3, Management v3) and ClientLogin used by `Garb` have been shut down by Google; README now points to GA4 replacement gems
   * Replaced deprecated `MultiJson` with stdlib `JSON` and dropped the `multi_json` dependency
   * Added `ostruct` as a runtime dependency (no longer a default gem starting with Ruby 3.5)
   * Declared `required_ruby_version` as `>= 3.2`, matching the CI matrix
