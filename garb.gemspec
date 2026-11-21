@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = 'garb'
   gem.require_paths = ['lib']
+  gem.required_ruby_version = '>= 3.2'
   gem.version       = Garb::VERSION
 
   gem.add_dependency 'activesupport', '>= 2.2'
