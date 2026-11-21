@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.version       = Garb::VERSION
 
   gem.add_dependency 'activesupport', '>= 2.2'
+  gem.add_dependency 'ostruct', '~> 0.6'
 end
