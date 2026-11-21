@@ -178,6 +178,35 @@ module Garb
             results = @test_model.all_results(@profile, :limit => 1)
             assert_equal results.size, 1
           end
+
+          should 'fetch multiple pages of results from an offset' do
+            rows = (11..25).map { |i| "result ##{i}" }
+            pages = [rows[0...10], rows[10..-1]].map do |page|
+              result_set = ResultSet.new(page)
+              result_set.total_results = 25
+              stub(results: result_set)
+            end
+            ReportResponse.stubs(:new).returns(*pages)
+
+            results = @test_model.results(@profile, all: true, offset: 11)
+            assert_equal rows, results.to_a
+            [11, 21].each do |start_index|
+              assert_data_params(
+                @params.merge('max-results' => 10_000,
+                              'start-index' => start_index)
+              )
+            end
+          end
+
+          should 'fetch multiple pages of results with a nil offset' do
+            @results.total_results = 25
+            results = @test_model.results(@profile, all: true, offset: nil)
+            assert_equal 30, results.size
+            assert_data_params(@params.merge('max-results' => 10_000))
+            assert_data_params(
+              @params.merge('max-results' => 10_000, 'start-index' => 11)
+            )
+          end
         end
 
         # should "return results as an array of the class it belongs to, if that class is an ActiveRecord descendant"
