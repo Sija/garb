@@ -27,7 +27,9 @@ module Garb
     end
 
     def results(profile, options = {})
-      return all_results(profile, options) if options.delete(:all)
+      if options[:all]
+        return all_results(profile, options.reject { |key, _| key == :all })
+      end
 
       start_date = options[:start_date] || Time.now - MONTH
       end_date = options[:end_date] || Time.now
