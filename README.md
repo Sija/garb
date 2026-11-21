@@ -9,7 +9,7 @@ Deprecation Notice
 **This gem is no longer functional against Google's live services and is kept for historical purposes only.**
 
   * `Garb` targets the Google Analytics **Core Reporting API v3** and **Management API v3** (Universal Analytics). Google stopped processing Universal Analytics data in July 2023 (July 2024 for Analytics 360) and has since shut both APIs down. See https://support.google.com/analytics/answer/11583528
-  * Username/password authentication (`Garb::Session.login`) relies on **ClientLogin**, which Google shut down on April 20th, 2015. See https://developers.google.com/identity/protocols/AuthForInstalledApps
+  * Username/password authentication (`Garb::Session.login`) relies on **ClientLogin**, which Google shut down on April 20th, 2015.
   * Google Analytics 4 (GA4) uses a different API with a different data model (e.g. `sessions`/`screenPageViews` instead of `ga:visits`/`ga:pageviews`, properties instead of profiles), so `Garb` cannot be pointed at it.
 
 Replacements
@@ -28,7 +28,7 @@ Authentication for all of the above is handled by [`googleauth`](https://rubygem
 
 [Legato](https://github.com/tpitale/legato), previously recommended here as a successor, also targets the retired Universal Analytics API and is no longer an option.
 
-Migration guide: https://developers.google.com/analytics/devguides/migration/api/reporting-ua-to-ga4
+Getting started with GA4: [Data API overview](https://developers.google.com/analytics/devguides/reporting/data/v1) and [quickstart](https://developers.google.com/analytics/devguides/reporting/data/v1/quickstart)
 
 Important Changes
 -----------------
