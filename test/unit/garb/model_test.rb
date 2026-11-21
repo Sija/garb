@@ -198,6 +198,13 @@ module Garb
             end
           end
 
+          should 'stop at a short page when the total is unknown' do
+            @results.total_results = nil
+            results = @test_model.all_results(@profile)
+            assert_equal @results.to_a, results.to_a
+            assert_received(Request::Data, :new) { |e| e.once }
+          end
+
           context 'when fetching all pages from an offset' do
             setup do
               @rows = (11..25).map { |i| "result ##{i}" }

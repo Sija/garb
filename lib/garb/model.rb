@@ -67,7 +67,9 @@ module Garb
         options[:offset] = next_offset
 
         break if limit && results.size >= limit
-        break if next_offset > results.total_results
+        # without a known total, a short page means there is nothing more to fetch
+        total = results.total_results
+        break if total ? next_offset > total : rs.size < options[:limit]
 
         options[:limit] = page_size(limit, results.size)
       end
