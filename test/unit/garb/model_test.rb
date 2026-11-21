@@ -232,6 +232,16 @@ module Garb
             )
           end
 
+          should 'return an empty result set when the offset is past the end' do
+            empty = ResultSet.new([])
+            empty.total_results = 25
+            ReportResponse.stubs(:new).returns(stub(results: empty))
+
+            results = @test_model.results(@profile, all: true, offset: 26)
+            assert_instance_of ResultSet, results
+            assert results.empty?
+          end
+
           should 'reject an offset lower than 1' do
             assert_raises(ArgumentError) do
               @test_model.results(@profile, all: true, offset: 0)

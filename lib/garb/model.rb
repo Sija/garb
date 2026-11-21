@@ -64,7 +64,8 @@ module Garb
         break if limit && results.size >= limit
         break if next_offset > results.total_results
       end
-      limit && results ? results[0...limit] : results
+      results ||= rs # empty result set when nothing was fetched
+      limit ? results[0...limit] : results
     end
 
     private
