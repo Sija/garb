@@ -202,6 +202,12 @@ module Garb
               assert_equal [11, 21], @start_indexes
             end
 
+            should 'accept an offset given as a string' do
+              results = @test_model.results(@profile, all: true, offset: '11')
+              assert_equal @rows, results.to_a
+              assert_equal [11, 21], @start_indexes
+            end
+
             should 'apply the limit to rows after the offset' do
               results = @test_model.results(@profile, all: true, offset: 11, limit: 12)
               assert_equal @rows[0...12], results.to_a
@@ -224,6 +230,18 @@ module Garb
             assert_data_params(
               @params.merge('max-results' => 10_000, 'start-index' => 11)
             )
+          end
+
+          should 'reject an offset lower than 1' do
+            assert_raises(ArgumentError) do
+              @test_model.results(@profile, all: true, offset: 0)
+            end
+          end
+
+          should 'reject a non-numeric offset' do
+            assert_raises(ArgumentError) do
+              @test_model.results(@profile, all: true, offset: 'abc')
+            end
           end
         end
 

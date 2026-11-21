@@ -50,7 +50,10 @@ module Garb
     def all_results(profile, options = {})
       options = options.dup
       limit = options.delete(:limit)
-      offset = options[:offset] || 1 # start-index is 1-based
+      offset = Integer(options[:offset] || 1) # start-index is 1-based
+      raise ArgumentError, ':offset must be greater than or equal to 1' if offset < 1
+      options[:offset] = offset if options[:offset]
+
       options[:limit] = 10_000 # maximum allowed
       results = nil
       while ((rs = results(profile, options)) && !rs.empty?)
