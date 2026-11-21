@@ -55,10 +55,11 @@ module Garb
       results = nil
       while ((rs = results(profile, options)) && !rs.empty?)
         results = results ? results + rs : rs
-        options[:offset] = offset + results.size
+        next_offset = offset + results.size
+        options[:offset] = next_offset
 
         break if limit && results.size >= limit
-        break if offset - 1 + results.size >= results.total_results
+        break if next_offset > results.total_results
       end
       limit && results ? results[0...limit] : results
     end
