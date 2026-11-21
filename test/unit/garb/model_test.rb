@@ -173,6 +173,13 @@ module Garb
             assert_equal results.size, @results.total_results
           end
 
+          should 'not modify the options passed with :all' do
+            @results.total_results = 10
+            options = { all: true, offset: 1 }
+            @test_model.results(@profile, options)
+            assert_equal({ all: true, offset: 1 }, options)
+          end
+
           should "be able to fetch multiple pages of results with a limit" do
             @results.total_results = 25
             results = @test_model.all_results(@profile, :limit => 1)
