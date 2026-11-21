@@ -1,3 +1,7 @@
+Next
+
+  * [#75](https://github.com/Sija/garb/pull/75): Fixed `Garb::Model#all_results` (`:all => true`) ignoring `:offset` after the first page - [@dblock](https://github.com/dblock)
+
 Version 0.9.8
 
   * Switched to `Net::HTTP.new` as `Net::HTTP.start` doesn't honor timeout values (http://www.ruby-forum.com/topic/148968)

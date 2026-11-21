@@ -178,6 +178,81 @@ module Garb
             results = @test_model.all_results(@profile, :limit => 1)
             assert_equal results.size, 1
           end
+
+          context 'when fetching all pages from an offset' do
+            setup do
+              @rows = (11..25).map { |i| "result ##{i}" }
+              pages = [@rows[0...10], @rows[10..-1]].map do |page|
+                result_set = ResultSet.new(page)
+                result_set.total_results = 25
+                stub(results: result_set)
+              end
+              ReportResponse.stubs(:new).returns(*pages)
+
+              @start_indexes = []
+              Request::Data.stubs(:new).with do |_session, _url, params|
+                @start_indexes << params['start-index']
+                true
+              end.returns(stub(send_request: @response))
+            end
+
+            should 'continue paging from the given offset' do
+              results = @test_model.results(@profile, all: true, offset: 11)
+              assert_equal @rows, results.to_a
+              assert_equal [11, 21], @start_indexes
+            end
+
+            should 'accept an offset given as a string' do
+              results = @test_model.results(@profile, all: true, offset: '11')
+              assert_equal @rows, results.to_a
+              assert_equal [11, 21], @start_indexes
+            end
+
+            should 'apply the limit to rows after the offset' do
+              results = @test_model.results(@profile, all: true, offset: 11, limit: 12)
+              assert_equal @rows[0...12], results.to_a
+              assert_equal [11, 21], @start_indexes
+            end
+          end
+
+          should 'fetch all pages from the start with a nil offset' do
+            rows = (1..15).map { |i| "result ##{i}" }
+            pages = [rows[0...10], rows[10..-1]].map do |page|
+              result_set = ResultSet.new(page)
+              result_set.total_results = 15
+              stub(results: result_set)
+            end
+            ReportResponse.stubs(:new).returns(*pages)
+
+            results = @test_model.results(@profile, all: true, offset: nil)
+            assert_equal rows, results.to_a
+            assert_data_params(@params.merge('max-results' => 10_000))
+            assert_data_params(
+              @params.merge('max-results' => 10_000, 'start-index' => 11)
+            )
+          end
+
+          should 'return an empty result set when the offset is past the end' do
+            empty = ResultSet.new([])
+            empty.total_results = 25
+            ReportResponse.stubs(:new).returns(stub(results: empty))
+
+            results = @test_model.results(@profile, all: true, offset: 26)
+            assert_instance_of ResultSet, results
+            assert results.empty?
+          end
+
+          should 'reject an offset lower than 1' do
+            assert_raises(ArgumentError) do
+              @test_model.results(@profile, all: true, offset: 0)
+            end
+          end
+
+          should 'reject a non-numeric offset' do
+            assert_raises(ArgumentError) do
+              @test_model.results(@profile, all: true, offset: 'abc')
+            end
+          end
         end
 
         # should "return results as an array of the class it belongs to, if that class is an ActiveRecord descendant"
