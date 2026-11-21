@@ -23,6 +23,7 @@ module Garb
     def +(other)
       copy = dup
       copy.results = @results + other.to_a
+      copy.sampled = sampled || (other.respond_to?(:sampled) && other.sampled)
       copy
     end
 
