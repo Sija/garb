@@ -16,7 +16,7 @@ end
 require 'bundler'
 Bundler.setup(:default, :test)
 
-require 'shoulda'
+require 'shoulda/context'
 require 'minitest/unit'
 require 'minitest/autorun'
 require 'mocha'
@@ -25,9 +25,7 @@ $:.unshift File.expand_path('../../lib', __FILE__)
 require 'garb'
 
 class MiniTest::Unit::TestCase
-  include Shoulda::Context::Assertions
-  include Shoulda::Context::InstanceMethods
-  extend Shoulda::Context::ClassMethods
+  include Shoulda::Context::DSL
 
   def read_fixture(filename)
     File.read(File.dirname(__FILE__) + "/fixtures/#{filename}")
